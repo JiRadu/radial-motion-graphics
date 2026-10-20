@@ -62,9 +62,9 @@ export const FeatureRow: React.FC<{
     >
       <span
         style={{
-          fontFamily: FONTS.display,
-          fontWeight: 500,
-          fontSize: 54,
+          fontFamily: FONTS.heading,
+          fontWeight: 600,
+          fontSize: 50,
           color: COLORS.accent,
           minWidth: 70,
         }}
@@ -74,9 +74,10 @@ export const FeatureRow: React.FC<{
       <div>
         <div
           style={{
-            fontFamily: FONTS.display,
-            fontWeight: 500,
-            fontSize: 40,
+            fontFamily: FONTS.heading,
+            fontWeight: 600,
+            fontSize: 34,
+            letterSpacing: 2,
             textTransform: "uppercase",
             color: COLORS.text,
           }}
@@ -93,7 +94,7 @@ export const FeatureRow: React.FC<{
   );
 };
 
-/** Rounded pill label that pops in. */
+/** Square-cornered label that pops in (brandbook: corners 0–4 px). */
 export const Chip: React.FC<{
   text: string;
   delay?: number;
@@ -104,7 +105,7 @@ export const Chip: React.FC<{
     <div
       style={{
         padding: "12px 28px",
-        borderRadius: 999,
+        borderRadius: 2,
         border: `2px solid ${color}`,
         color: COLORS.text,
         fontFamily: FONTS.body,

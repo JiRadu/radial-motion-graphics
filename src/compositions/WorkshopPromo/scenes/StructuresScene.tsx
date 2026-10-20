@@ -227,9 +227,9 @@ const Panel: React.FC<{
         style={{
           padding: "18px 28px",
           borderTop: `1px solid ${COLORS.line}`,
-          fontFamily: FONTS.display,
-          fontWeight: 500,
-          fontSize: 34,
+          fontFamily: FONTS.heading,
+          fontWeight: 600,
+          fontSize: 30,
           textTransform: "uppercase",
           letterSpacing: 2,
           color: COLORS.text,

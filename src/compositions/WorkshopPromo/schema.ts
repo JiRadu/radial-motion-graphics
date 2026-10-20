@@ -11,6 +11,8 @@ export const workshopPromoSchema = z.object({
   /** On-screen text language; the texts themselves live in copy.ts. */
   language: z.enum(LANGUAGES),
   brandName: z.string(),
+  /** Shown first in the outro contact line; empty = hidden. */
+  phone: z.string(),
   website: z.string(),
   email: z.string(),
   width: z.number().int().min(16),

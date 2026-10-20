@@ -18,13 +18,14 @@ import { StructuresScene } from "./scenes/StructuresScene";
 import { TechnologyScene } from "./scenes/TechnologyScene";
 
 /**
- * Promo for a small metal-fabrication workshop.
+ * Radial Cons promo — metal-fabrication workshop, styled to the Radial Cons brandbook.
  * Scene order:   intro -> furniture -> structures -> custom -> technology -> outro
  * Transitions:   slide,   wipe,         fade,       slide,    fade
  */
 export const WorkshopPromo: React.FC<WorkshopPromoProps> = ({
   language,
   brandName,
+  phone,
   website,
   email,
   sceneSeconds,
@@ -108,6 +109,7 @@ export const WorkshopPromo: React.FC<WorkshopPromoProps> = ({
                 brandName={brandName}
                 tagline={copy.intro.tagline}
                 cta={copy.outro.cta}
+                phone={phone}
                 website={website}
                 email={email}
                 durationInFrames={f(sceneSeconds.outro)}

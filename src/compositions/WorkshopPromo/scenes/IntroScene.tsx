@@ -1,19 +1,27 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Polygon } from "@remotion/shapes";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
 import {
   AnimatedTitle,
   Background,
   Chip,
   Eyebrow,
+  RadialBurst,
   Sfx,
   Stage,
 } from "../../../components";
-import { COLORS, FONTS } from "../../../theme";
+import { COLORS, LOGO } from "../../../theme";
 import { SPRINGS, useProgress, useSpringIn } from "../../../utils/animation";
 import { useSpeed } from "../../../utils/speed";
 import { useSeconds } from "../../../utils/timing";
 import { Copy } from "../copy";
+
+const LOGO_WIDTH = 1040;
 
 export const IntroScene: React.FC<{
   brandName: string;
@@ -26,6 +34,7 @@ export const IntroScene: React.FC<{
   const sweep = useProgress(0, s(0.9));
   const open = useProgress(s(0.55), s(1.5));
   const brand = useSpringIn(s(0.55), SPRINGS.heavy);
+  const burst = useProgress(s(0.4), s(1.8));
   const pushIn = interpolate(frame, [0, s(5)], [1, 1.06]);
 
   return (
@@ -45,20 +54,15 @@ export const IntroScene: React.FC<{
             transform: `scale(${pushIn})`,
           }}
         >
+          {/* The logo's sunburst, huge and faint, slowly turning. */}
           <div
             style={{
               position: "absolute",
-              opacity: 0.22 * brand,
-              transform: `rotate(${frame * speed * 0.25}deg) scale(${interpolate(brand, [0, 1], [0.7, 1])})`,
+              opacity: 0.16,
+              transform: `rotate(${frame * speed * 0.08}deg)`,
             }}
           >
-            <Polygon
-              points={6}
-              radius={430}
-              fill="none"
-              stroke={COLORS.accent}
-              strokeWidth={2}
-            />
+            <RadialBurst radius={520} progress={burst} rays={40} />
           </div>
 
           <div
@@ -72,22 +76,17 @@ export const IntroScene: React.FC<{
             <Eyebrow text={copy.eyebrow} delay={s(0.15)} />
 
             <div style={{ position: "relative" }}>
-              <div
+              <Img
+                src={staticFile(LOGO.horizontalColor)}
+                alt={brandName}
                 style={{
-                  fontFamily: FONTS.display,
-                  fontWeight: 700,
-                  fontSize: 230,
-                  lineHeight: 1,
-                  letterSpacing: interpolate(brand, [0, 1], [70, 16]),
-                  background: `linear-gradient(180deg, ${COLORS.text} 30%, ${COLORS.steel} 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
+                  display: "block",
+                  width: LOGO_WIDTH,
+                  height: LOGO_WIDTH / LOGO.horizontalAspect,
                   clipPath: `inset(${(1 - open) * 50}% 0 ${(1 - open) * 50}% 0)`,
+                  transform: `scale(${interpolate(brand, [0, 1], [0.94, 1])})`,
                 }}
-              >
-                {brandName}
-              </div>
+              />
               <div
                 style={{
                   position: "absolute",
@@ -97,7 +96,7 @@ export const IntroScene: React.FC<{
                   width: `${sweep * 120}%`,
                   transform: "translate(-50%, -50%)",
                   background: COLORS.laser,
-                  boxShadow: `0 0 24px 6px ${COLORS.laser}`,
+                  boxShadow: `0 0 24px 6px ${COLORS.accent}`,
                   opacity: interpolate(open, [0.5, 1], [1, 0], {
                     extrapolateLeft: "clamp",
                     extrapolateRight: "clamp",
@@ -111,7 +110,6 @@ export const IntroScene: React.FC<{
               fontSize={72}
               delay={s(1.5)}
               highlight={copy.tagline.highlight}
-              style={{ fontWeight: 500, letterSpacing: 4 }}
             />
 
             <div style={{ display: "flex", gap: 22, marginTop: 20 }}>

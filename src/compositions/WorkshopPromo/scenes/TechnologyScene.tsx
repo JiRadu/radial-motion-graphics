@@ -171,9 +171,9 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
                   <Icon progress={draw} active={active > 0.5} size={210} />
                   <div
                     style={{
-                      fontFamily: FONTS.display,
-                      fontWeight: 500,
-                      fontSize: 36,
+                      fontFamily: FONTS.heading,
+                      fontWeight: 600,
+                      fontSize: 32,
                       whiteSpace: "nowrap",
                       textTransform: "uppercase",
                       color: COLORS.text,

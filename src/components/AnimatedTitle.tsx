@@ -64,9 +64,8 @@ export const AnimatedTitle: React.FC<{
       fontFamily: FONTS.display,
       fontWeight: 700,
       fontSize,
-      lineHeight: 1.04,
-      textTransform: "uppercase",
-      letterSpacing: 1,
+      // Brandbook: Playfair Display in sentence case, never all caps.
+      lineHeight: 1.08,
       ...style,
     }}
   >

@@ -1,33 +1,43 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Circle, Polygon } from "@remotion/shapes";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
 import {
   AnimatedTitle,
   Background,
   FadeUp,
+  RadialBurst,
   Sfx,
   Stage,
 } from "../../../components";
-import { COLORS, FONTS } from "../../../theme";
+import { COLORS, FONTS, LOGO } from "../../../theme";
 import { SPRINGS, useProgress, useSpringIn } from "../../../utils/animation";
 import { useSpeed } from "../../../utils/speed";
 import { useSeconds } from "../../../utils/timing";
 import { Copy } from "../copy";
 
+const LOGO_WIDTH = 900;
+
 export const OutroScene: React.FC<{
   brandName: string;
   tagline: Copy["intro"]["tagline"];
   cta: string;
+  phone: string;
   website: string;
   email: string;
   durationInFrames: number;
-}> = ({ brandName, tagline, cta, website, email, durationInFrames }) => {
+}> = ({ brandName, tagline, cta, phone, website, email, durationInFrames }) => {
   const frame = useCurrentFrame();
   const speed = useSpeed();
   const s = useSeconds();
 
   const ring = useSpringIn(s(0.2), SPRINGS.heavy);
   const brand = useSpringIn(s(0.4), SPRINGS.smooth);
+  const burst = useProgress(s(0.2), s(1.4));
   const divider = useProgress(s(1.4), s(2.2));
   const fadeOut = interpolate(
     frame,
@@ -35,6 +45,7 @@ export const OutroScene: React.FC<{
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
+  const contacts = [phone, website, email].filter(Boolean);
 
   return (
     <AbsoluteFill style={{ opacity: fadeOut, backgroundColor: "black" }}>
@@ -49,32 +60,11 @@ export const OutroScene: React.FC<{
           <div
             style={{
               position: "absolute",
-              opacity: 0.35 * ring,
-              transform: `scale(${interpolate(ring, [0, 1], [0.5, 1])}) rotate(${-frame * speed * 0.2}deg)`,
+              opacity: 0.14 * ring,
+              transform: `scale(${interpolate(ring, [0, 1], [0.6, 1])}) rotate(${-frame * speed * 0.06}deg)`,
             }}
           >
-            <Circle
-              radius={440}
-              fill="none"
-              stroke={COLORS.line}
-              strokeWidth={2}
-              strokeDasharray="6 14"
-            />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              opacity: 0.25 * ring,
-              transform: `rotate(${frame * speed * 0.3}deg)`,
-            }}
-          >
-            <Polygon
-              points={6}
-              radius={360}
-              fill="none"
-              stroke={COLORS.accent}
-              strokeWidth={2}
-            />
+            <RadialBurst radius={500} progress={burst} rays={40} />
           </div>
 
           <div
@@ -85,26 +75,22 @@ export const OutroScene: React.FC<{
               gap: 26,
             }}
           >
-            <div
+            <Img
+              src={staticFile(LOGO.horizontalColor)}
+              alt={brandName}
               style={{
-                fontFamily: FONTS.display,
-                fontWeight: 700,
-                fontSize: 200,
-                lineHeight: 1,
-                letterSpacing: interpolate(brand, [0, 1], [40, 14]),
-                color: COLORS.text,
+                display: "block",
+                width: LOGO_WIDTH,
+                height: LOGO_WIDTH / LOGO.horizontalAspect,
                 opacity: brand,
                 transform: `scale(${interpolate(brand, [0, 1], [0.9, 1])})`,
               }}
-            >
-              {brandName}
-            </div>
+            />
             <AnimatedTitle
               text={tagline.text}
-              fontSize={60}
+              fontSize={64}
               delay={s(0.8)}
               highlight={tagline.highlight}
-              style={{ fontWeight: 500, letterSpacing: 4 }}
             />
             <div
               style={{
@@ -117,11 +103,11 @@ export const OutroScene: React.FC<{
             <FadeUp delay={s(1.8)}>
               <div
                 style={{
-                  fontFamily: FONTS.display,
-                  fontWeight: 500,
-                  fontSize: 56,
+                  fontFamily: FONTS.heading,
+                  fontWeight: 600,
+                  fontSize: 44,
                   textTransform: "uppercase",
-                  letterSpacing: 3,
+                  letterSpacing: 6,
                   color: COLORS.accent,
                 }}
               >
@@ -132,15 +118,20 @@ export const OutroScene: React.FC<{
               <div
                 style={{
                   display: "flex",
-                  gap: 50,
+                  gap: 40,
                   fontFamily: FONTS.body,
-                  fontSize: 32,
+                  fontSize: 30,
                   color: COLORS.steel,
                 }}
               >
-                <span>{website}</span>
-                <span style={{ color: COLORS.line }}>|</span>
-                <span>{email}</span>
+                {contacts.map((c, i) => (
+                  <React.Fragment key={c}>
+                    {i > 0 ? (
+                      <span style={{ color: COLORS.line }}>|</span>
+                    ) : null}
+                    <span>{c}</span>
+                  </React.Fragment>
+                ))}
               </div>
             </FadeUp>
           </div>
