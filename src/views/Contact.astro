@@ -43,7 +43,7 @@ const mailto = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body
           <a class="contact-card" href={SITE.mapsUrl} target="_blank" rel="noopener" style="grid-column:1/-1">
             <span>{ui.address}</span>
             <strong>{SITE.address.street}</strong>
-            <span style="letter-spacing:0;text-transform:none;font-weight:400;font-size:15px;color:var(--rc-text-2)">{SITE.address.postalCode} {SITE.address.city}, {ro ? "jud." : ""} {SITE.address.county}{ro ? "" : " County, Romania"} · {ui.openMap} →</span>
+            <span style="letter-spacing:0;text-transform:none;font-weight:400;font-size:15px;color:var(--fg-2)">{SITE.address.postalCode} {SITE.address.city}, {ro ? "jud." : ""} {SITE.address.county}{ro ? "" : " County, Romania"} · {ui.openMap} →</span>
           </a>
         </div>
         <address style="font-style:normal" class="sr-only">{SITE.legalName}, {SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}, {SITE.address.county}, Romania. {SITE.phoneMobile.intl}. {SITE.email}</address>
