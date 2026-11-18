@@ -32,7 +32,7 @@ npm run check    # verificare de tipuri
 ### Înainte de lansare
 
 - **Testimonialele sunt exemple inventate.** Înlocuiește-le cu citate reale, aprobate de clienți. Legislația UE privind practicile comerciale neloiale interzice recenziile false. Ele nu apar în datele structurate (nu există marcaj Review sau AggregateRating).
-- **Lucrările** descriu tipuri reale de lucrări, fără nume de clienți și fără cifre inventate. Când ai fotografii, pune-le în `public/media/work/` și completează `photos` în `projects.ts`. Pagina le folosește atunci în locul desenului tehnic.
+- **Lucrările** descriu tipuri reale de lucrări, fără nume de clienți și fără cifre inventate. Pentru fotografii reale, pune originalele în `photos-in/<id-lucrare>/` (vezi `photos-in/README.md`). La build sunt normalizate automat în stilul brandului: 4:5, tentă caldă, umbre sus și jos, WebP în două mărimi. Ele înlocuiesc apoi desenul tehnic pe card și apar în galeria lucrării.
 - Programul de lucru, conturile de Instagram și TikTok și certificările nu sunt pe site, pentru că brandbook-ul le marchează „de completat”.
 
 ## Mișcare (motion): ce am ales și de ce

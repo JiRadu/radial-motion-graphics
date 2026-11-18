@@ -22,7 +22,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const ui = t(lang);
 const ro = lang === "ro";
-const featured = ["bar-stools", "firepit", "hall", "prototype"].map((id) => PROJECTS.find((p) => p.id === id)!);
+const featured = ["terasa-fotovoltaica", "bar-stools", "firepit", "prototype"].map((id) => PROJECTS.find((p) => p.id === id)!);
 const posts = (await postsFor(lang)).slice(0, 3);
 const custom = serviceById("custom");
 

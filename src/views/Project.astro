@@ -54,7 +54,12 @@ const others = PROJECTS.filter((x) => x.id !== p.id).sort((a, b) => Number(b.ser
         </div>
         <div>
           {p.photos?.length
-            ? p.photos.map((ph) => <img src={ph.src} alt={ph.alt[lang]} loading="lazy" width="800" height="1000" style="margin-bottom:16px" />)
+            ? <>
+                <a class="photo-main" href={p.photos[0].src} target="_blank" rel="noopener">
+                  <img class="photo" src={p.photos[0].src} srcset={`${p.photos[0].srcSm} 640w, ${p.photos[0].src} 1080w`} sizes="(min-width: 900px) 40vw, 100vw" alt={p.photos[0].alt[lang]} width="1080" height="1350" fetchpriority="high" decoding="async" />
+                </a>
+                <p class="figure-note">{p.photos[0].alt[lang]}</p>
+              </>
             : <>
                 <div class="media media--portrait"><Drawing name={p.drawing} label={`${ui.illustration}: ${p.title[lang]}`} /></div>
                 <p class="figure-note">{ro ? "Desen tehnic ilustrativ. Fotografiile lucrării vor fi adăugate în curând." : "Illustrative technical drawing. Project photos coming soon."}</p>
@@ -63,6 +68,24 @@ const others = PROJECTS.filter((x) => x.id !== p.id).sort((a, b) => Number(b.ser
       </div>
     </div>
   </section>
+
+  {p.photos && p.photos.length > 1 && (
+    <section class="section section--dark" aria-label={ro ? "Galerie foto" : "Photo gallery"}>
+      <div class="container">
+        <SectionHead eyebrow={ro ? "Galerie" : "Gallery"} title={ro ? "Fotografii de pe lucrare." : "Photos from the job."} />
+        <ul class="gallery grid grid--3 grid--scroll">
+          {p.photos.map((ph) => (
+            <li>
+              <a href={ph.src} target="_blank" rel="noopener">
+                <img class="photo" src={ph.srcSm} srcset={`${ph.srcSm} 640w, ${ph.src} 1080w`} sizes="(min-width: 1000px) 33vw, (min-width: 640px) 50vw, 84vw" alt={ph.alt[lang]} width="640" height="800" loading="lazy" decoding="async" />
+              </a>
+              <p class="figure-note">{ph.alt[lang]}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
 
   <section class="section section--cream">
     <div class="container">

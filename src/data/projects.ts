@@ -1,5 +1,6 @@
 import type { Lang } from "../i18n/ui";
 import type { DrawingKey } from "../components/drawings";
+import photoManifest from "./photos.json";
 
 type L<T> = Record<Lang, T>;
 
@@ -8,9 +9,11 @@ type L<T> = Record<Lang, T>;
  *
  * These are written from the types of work shown in Radial Cons' posts and in the brandbook
  * (mirror-polished stainless bar stools, laser-cut firepits, halls, PV structures…). They name no
- * clients and contain no invented figures. When real photos exist, add them to /public/media/work/
- * and set `photos` — the page will show them instead of the technical drawing.
+ * clients and contain no invented figures. Real photos: put originals in photos-in/<id>/ and run
+ * `npm run photos` — they replace the technical drawing on the card and fill the project gallery.
  */
+export interface Photo { src: string; srcSm: string; alt: L<string> }
+
 export interface Project {
   id: string;
   slug: L<string>;
@@ -25,7 +28,7 @@ export interface Project {
   finish: L<string>;
   scope: L<string[]>;
   story: L<string[]>;
-  photos?: { src: string; alt: L<string> }[];
+  photos?: Photo[];
 }
 
 export const PROJECTS: Project[] = [
@@ -146,31 +149,34 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    id: "solar",
-    slug: { ro: "structuri-panouri-fotovoltaice", en: "photovoltaic-mounting-structures" },
+    // Real project — photos and text from the Radial Cons carousel "De la cadru la ultimul panou."
+    id: "terasa-fotovoltaica",
+    slug: { ro: "structura-panouri-fotovoltaice-terasa", en: "rooftop-terrace-solar-panel-structure" },
     service: "structures",
     drawing: "solar",
-    title: { ro: "Structuri pentru panouri fotovoltaice", en: "Photovoltaic mounting structures" },
-    headline: { ro: "Energie pe o structură corectă.", en: "Energy on a sound structure." },
+    title: { ro: "Structură metalică pentru panouri fotovoltaice pe terasă", en: "Steel structure for solar panels on a terrace" },
+    headline: { ro: "De la cadru la ultimul panou.", en: "From frame to the last panel." },
     summary: {
-      ro: "Structuri de montaj pentru panouri, produse în serie, cu toleranțe constante.",
-      en: "Panel mounting structures produced in series with consistent tolerances.",
+      ro: "Structură din țeavă rectangulară vopsită, asamblată direct pe terasă, cu ușă de acces integrată și spațiu util sub panouri. Executată și montată de echipa Radial Cons.",
+      en: "A painted rectangular-tube frame assembled right on the terrace, with an integrated access door and usable space under the panels. Fabricated and installed by the Radial Cons team.",
     },
-    setting: { ro: "Energie · Agricultură", en: "Energy · Agriculture" },
-    material: { ro: "Oțel carbon", en: "Carbon steel" },
-    finish: { ro: "Protecție anticorozivă", en: "Anti-corrosion coating" },
+    setting: { ro: "Terasă · Fotovoltaic", en: "Terrace · Solar" },
+    material: { ro: "Țeavă rectangulară din oțel", en: "Rectangular steel tube" },
+    finish: { ro: "Vopsit, gri antracit", en: "Painted, anthracite grey" },
     scope: {
-      ro: ["Debitare și găurire în serie", "Îndoire CNC profile", "Sudură", "Pachete pregătite pentru montaj"],
-      en: ["Series cutting and drilling", "CNC profile bending", "Welding", "Kits packed for installation"],
+      ro: ["Proiectarea cadrului pentru terasă", "Debitarea și sudura țevii rectangulare", "Vopsire în gri antracit", "Asamblare pe terasă, cu ușă de acces integrată", "Închiderea laturilor cu tablă cutată", "Montajul ramelor și al panourilor"],
+      en: ["Designing the frame for the terrace", "Cutting and welding the rectangular tube", "Anthracite grey paint finish", "Assembly on the terrace, with an integrated access door", "Cladding the sides in corrugated sheet", "Fitting the rails and the panels"],
     },
     story: {
       ro: [
-        "Structurile fotovoltaice se repetă de sute de ori, așa că orice abatere se multiplică. Îndoirea CNC și debitarea laser ne dau aceeași piesă de fiecare dată.",
-        "Livrăm structurile pe pachete, ca echipa de montaj să găsească ușor fiecare element.",
+        "Întâi, cadrul de oțel. Țeava rectangulară vopsită a fost asamblată direct pe terasă. Ușa de acces e integrată în cadru, iar spațiul de sub panouri rămâne util.",
+        "Apoi, panou cu panou. Laturile se închid cu tablă cutată, în același gri antracit, iar panourile se fixează pe rame, rând cu rând, la unghiul gândit pentru soare.",
+        "Ai un acoperiș liber? Proiectăm și executăm structuri pentru panouri fotovoltaice pe terasă, pe acoperiș sau la sol.",
       ],
       en: [
-        "PV structures repeat hundreds of times, so any deviation multiplies. CNC bending and laser cutting give us the same part every time.",
-        "We deliver the structures in kits so the installation crew can find every part quickly.",
+        "First, the steel frame. The painted rectangular tube was assembled right on the terrace. The access door is built into the frame, and the space under the panels stays usable.",
+        "Then, panel by panel. The sides are clad in corrugated sheet in the same anthracite grey, and the panels are fixed to the rails row by row, at the angle chosen for the sun.",
+        "Got an unused roof? We design and build photovoltaic structures on terraces, roofs or on the ground.",
       ],
     },
   },
@@ -233,5 +239,19 @@ export const PROJECTS: Project[] = [
     },
   },
 ];
+
+// Attach normalised photos produced by `npm run photos` (src/data/photos.json).
+type ManifestEntry = { src: string; srcSm: string; alt: L<string> | null };
+const manifest = photoManifest as Record<string, ManifestEntry[]>;
+for (const p of PROJECTS) {
+  const list = manifest[p.id];
+  if (list?.length) {
+    p.photos = list.map((ph, i) => ({
+      src: ph.src,
+      srcSm: ph.srcSm,
+      alt: ph.alt ?? { ro: `${p.title.ro} — fotografia ${i + 1}`, en: `${p.title.en} — photo ${i + 1}` },
+    }));
+  }
+}
 
 export const projectsByService = (serviceId: string) => PROJECTS.filter((p) => p.service === serviceId);

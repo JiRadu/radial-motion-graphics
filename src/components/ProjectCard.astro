@@ -14,7 +14,7 @@ const svc = serviceById(p.service);
 <a class="card" href={child("projects", lang, p.slug[lang])} data-project={p.service}>
   <div class="card__media">
     {p.photos?.[0]
-      ? <img src={p.photos[0].src} alt={p.photos[0].alt[lang]} loading="lazy" width="800" height="1000" style="width:100%;height:100%;object-fit:cover" />
+      ? <img class="photo" src={p.photos[0].srcSm} srcset={`${p.photos[0].srcSm} 640w, ${p.photos[0].src} 1080w`} sizes="(min-width: 1000px) 25vw, (min-width: 640px) 50vw, 84vw" alt={p.photos[0].alt[lang]} loading="lazy" decoding="async" width="640" height="800" />
       : <Drawing name={p.drawing} label={`${ui.illustration}: ${p.title[lang]}`} />}
   </div>
   <div class="card__body">
