@@ -1,0 +1,36 @@
+---
+import Rays from "./Rays.astro";
+import { breadcrumbs as bcSchema } from "../lib/schema";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+  eyebrow?: string;
+  title: string;
+  /** Part of the title highlighted in gold, appended after `title`. */
+  accent?: string;
+  lead?: string;
+  crumbs: { name: string; href: string }[];
+}
+const { lang, eyebrow, title, accent, lead, crumbs } = Astro.props;
+const ui = t(lang);
+const schema = bcSchema(crumbs);
+---
+
+<section class="hero hero--page on-dark">
+  <Rays />
+  <div class="container">
+    <nav class="breadcrumbs" aria-label={ui.breadcrumb}>
+      <ol>
+        {crumbs.map((c, i) => (
+          <li>{i === crumbs.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={c.href}>{c.name}</a>}</li>
+        ))}
+      </ol>
+    </nav>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}{accent && <> <span class="accent">{accent}</span></>}</h1>
+    {lead && <><span class="goldline" aria-hidden="true"></span><p class="lead">{lead}</p></>}
+    <slot />
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>

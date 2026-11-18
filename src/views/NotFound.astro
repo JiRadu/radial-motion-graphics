@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import Rays from "../components/Rays.astro";
+import { r, t, type Lang, type RouteKey } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const links: RouteKey[] = ["home", "services", "projects", "contact"];
+---
+
+<Base lang={lang} title={`404 — ${ui.notFoundTitle} | Radial Cons`} description={ui.notFoundText} alternates={{ ro: "/404/", en: "/404/" }} noindex>
+  <section class="hero hero--page on-dark" style="min-height:60vh;display:grid;align-items:center">
+    <Rays />
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1>{ui.notFoundTitle}</h1>
+      <span class="goldline" aria-hidden="true"></span>
+      <p class="lead">{ui.notFoundText}</p>
+      <div class="btn-row">
+        {links.map((k, i) => <a class:list={["btn", i === 0 ? "btn--primary" : "btn--ghost"]} href={r(k, lang)}>{k === "home" ? ui.home : ui.nav[k as Exclude<RouteKey, "home">]}</a>)}
+      </div>
+    </div>
+  </section>
+</Base>

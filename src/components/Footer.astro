@@ -1,0 +1,53 @@
+---
+import { SITE } from "../data/site";
+import { SERVICES } from "../data/services";
+import { child, r, t, type Lang, type NavKey } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const pages: NavKey[] = ["projects", "process", "about", "testimonials", "journal", "faq", "contact"];
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <img src="/brand/radialcons-logo-orizontal-color.svg" alt="Radial Cons" width="200" height="77" loading="lazy" />
+        <p class="slogan">{ui.tagline} <em>{ui.taglineAccent}</em></p>
+        <p>{ui.footerAbout}</p>
+      </div>
+      <div>
+        <h2>{ui.nav.services}</h2>
+        <ul>
+          {SERVICES.map((s) => <li><a href={child("services", lang, s.slug[lang])}>{s.short[lang]}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2>{ui.explore}</h2>
+        <ul>
+          {pages.map((k) => <li><a href={r(k, lang)}>{ui.nav[k]}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2>{ui.reach}</h2>
+        <ul>
+          <li><a href={SITE.phoneMobile.href}>{SITE.phoneMobile.display}</a> <span>· {ui.phoneMobile}</span></li>
+          <li><a href={SITE.phoneFixed.href}>{SITE.phoneFixed.display}</a> <span>· {ui.phoneFixed}</span></li>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li>
+            <a href={SITE.mapsUrl} rel="noopener" target="_blank">
+              {SITE.address.street}<br />{SITE.address.postalCode} {SITE.address.city}, {SITE.address.county}
+            </a>
+          </li>
+          <li><a href={SITE.social.facebook} rel="noopener me" target="_blank">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© {year} {SITE.legalName} · CUI {SITE.vatId} · {SITE.regCom} · {ui.rights}</span>
+      <span>{ui.closing}</span>
+    </div>
+  </div>
+</footer>

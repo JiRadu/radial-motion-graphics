@@ -1,0 +1,19 @@
+---
+import Drawing from "./Drawing.astro";
+import type { Service } from "../data/services";
+import { child, t, type Lang } from "../i18n/ui";
+
+interface Props { service: Service; lang: Lang; index: number; tone?: "dark" | "light" }
+const { service: s, lang, index, tone = "dark" } = Astro.props;
+const ui = t(lang);
+---
+
+<a class="card svc-card" href={child("services", lang, s.slug[lang])}>
+  <div class="card__media"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} tone={tone} /></div>
+  <div class="card__body">
+    <span class="card__meta">{String(index + 1).padStart(2, "0")} · {s.eyebrow[lang]}</span>
+    <h3>{s.short[lang]}</h3>
+    <p>{s.summary[lang]}</p>
+    <span class="link-arrow">{ui.readMore}</span>
+  </div>
+</a>

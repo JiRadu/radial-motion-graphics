@@ -1,0 +1,70 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { SITE } from "../data/site";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.contact, href: r("contact", lang) },
+];
+
+// The quote checklist from the brandbook ("Oferte → B"), pre-filled into the email so nothing is forgotten.
+const checklist = ro
+  ? ["Nume, firmă, telefon", "Ce doriți să realizăm?", "Unde va fi folosit? (interior / exterior)", "Dimensiuni aproximative și cantitate", "Material preferat: inox / aluminiu / oțel / corten / nu știu încă", "Finisaj dorit: luciu oglindă / periat / vopsit / nu știu încă", "Schițe, poze sau fișiere DXF/STEP (atașate)", "Transport și montaj? Localitatea", "Termenul dorit", "Buget orientativ (opțional)"]
+  : ["Name, company, phone", "What would you like made?", "Where will it be used? (indoor / outdoor)", "Rough dimensions and quantity", "Preferred material: stainless / aluminium / steel / corten / not sure", "Desired finish: mirror / brushed / painted / not sure", "Sketches, photos or DXF/STEP files (attached)", "Transport and installation? Location", "Target date", "Indicative budget (optional)"];
+const subject = ro ? "Cerere de ofertă — Radial Cons" : "Quote request — Radial Cons";
+const body = (ro ? "Bună ziua,\n\n" : "Hello,\n\n") + checklist.map((c) => `${c}:\n`).join("\n");
+const mailto = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Contact și cerere de ofertă — Radial Cons, Târgoviște" : "Contact & quote request — Radial Cons, Târgoviște, Romania"}
+  description={ro
+    ? `Cere o ofertă pentru confecții metalice la comandă: ${SITE.phoneMobile.display}, ${SITE.email}. Atelier în ${SITE.address.street}, Târgoviște, Dâmbovița.`
+    : `Request a quote for custom metal fabrication: ${SITE.phoneMobile.intl}, ${SITE.email}. Workshop at ${SITE.address.street}, Târgoviște, Romania.`}
+  alternates={ROUTES.contact}
+  section="contact"
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.contact} title={ro ? "Ai un proiect?" : "Have a project?"} accent={ro ? "Hai să-i dăm formă." : "Let's give it shape."}
+    lead={ro ? "Sună-ne sau scrie-ne. Îți răspunde direct atelierul, nu un call center." : "Call or email us. You'll hear back directly from the workshop, not a call centre."} />
+
+  <section class="section">
+    <div class="container split split--top">
+      <div>
+        <div class="contact-cards">
+          <a class="contact-card" href={SITE.phoneMobile.href}><span>{ui.phoneMobile}</span><strong>{ro ? SITE.phoneMobile.display : SITE.phoneMobile.intl}</strong></a>
+          <a class="contact-card" href={SITE.phoneFixed.href}><span>{ui.phoneFixed}</span><strong>{ro ? SITE.phoneFixed.display : SITE.phoneFixed.intl}</strong></a>
+          <a class="contact-card" href={mailto} style="grid-column:1/-1"><span>{ui.email}</span><strong>{SITE.email}</strong></a>
+          <a class="contact-card" href={SITE.mapsUrl} target="_blank" rel="noopener" style="grid-column:1/-1">
+            <span>{ui.address}</span>
+            <strong>{SITE.address.street}</strong>
+            <span style="letter-spacing:0;text-transform:none;font-weight:400;font-size:15px;color:var(--rc-text-2)">{SITE.address.postalCode} {SITE.address.city}, {ro ? "jud." : ""} {SITE.address.county}{ro ? "" : " County, Romania"} · {ui.openMap} →</span>
+          </a>
+        </div>
+        <address style="font-style:normal" class="sr-only">{SITE.legalName}, {SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}, {SITE.address.county}, Romania. {SITE.phoneMobile.intl}. {SITE.email}</address>
+      </div>
+      <div>
+        <p class="eyebrow">{ui.cta}</p>
+        <h2>{ro ? "Ce să ne trimiți." : "What to send us."}</h2>
+        <span class="goldline" aria-hidden="true"></span>
+        <p class="muted">{ro ? "Cu cât știm mai multe, cu atât oferta e mai precisă. Butonul de mai jos deschide un email cu lista gata completată — tu doar răspunzi." : "The more we know, the more accurate the quote. The button below opens an email with this list ready — just fill it in."}</p>
+        <ol class="checklist" style="margin:24px 0 0">{checklist.map((c) => <li>{c}</li>)}</ol>
+        <div class="btn-row"><a class="btn btn--primary" href={mailto}>{ro ? "Scrie un email" : "Write an email"}</a><a class="btn btn--ghost" href={SITE.phoneMobile.href}>{ui.call} {SITE.phoneMobile.display}</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container center">
+      <p class="eyebrow" style="justify-content:center">Radial Cons</p>
+      <h2 style="margin-inline:auto">{ui.tagline} <span class="accent">{ui.taglineAccent}</span></h2>
+      <p class="lead" style="margin:16px auto 0">{ui.closing}</p>
+    </div>
+  </section>
+</Base>

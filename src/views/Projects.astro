@@ -1,0 +1,73 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { PROJECTS } from "../data/projects";
+import { SERVICES } from "../data/services";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.projects, href: r("projects", lang) },
+];
+const used = SERVICES.filter((s) => PROJECTS.some((p) => p.service === s.id));
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Lucrări — portofoliu de confecții metalice la comandă | Radial Cons" : "Work — custom metal fabrication portfolio | Radial Cons"}
+  description={ro
+    ? "Lucrări Radial Cons: scaune de bar din inox lustruit oglindă, vetre de foc din corten, baze de masă, structuri pentru hale și fotovoltaice, prototipuri, balustrade."
+    : "Radial Cons projects: mirror-polished stainless bar stools, corten firepits, aluminium table bases, steel frames for halls and PV, prototypes and railings."}
+  alternates={ROUTES.projects}
+  section="projects"
+>
+  <PageHero
+    lang={lang}
+    crumbs={crumbs}
+    eyebrow={ui.nav.projects}
+    title={ro ? "Din viziune," : "From vision"}
+    accent={ro ? "în realitate." : "to reality."}
+    lead={ro
+      ? "O selecție din tipurile de lucrări care pleacă din atelierul nostru. Fiecare proiect: ce am făcut, din ce material și cu ce finisaj."
+      : "A selection of the kinds of work that leave our workshop. Each project: what we did, in which material and with which finish."}
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="group" aria-label={ui.filterLabel} hidden data-filters>
+        <button type="button" aria-pressed="true" data-filter="all">{ui.filterAll}</button>
+        {used.map((s) => <button type="button" aria-pressed="false" data-filter={s.id}>{s.short[lang]}</button>)}
+      </div>
+      <div class="grid grid--3">
+        {PROJECTS.map((p) => <ProjectCard project={p} lang={lang} headingLevel="h2" />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<script is:inline>
+  // Progressive enhancement: filters appear only when JS is available; without JS all projects show.
+  (function () {
+    var bar = document.querySelector("[data-filters]");
+    if (!bar) return;
+    bar.hidden = false;
+    var cards = document.querySelectorAll("[data-project]");
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      bar.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      var f = b.dataset.filter;
+      cards.forEach(function (c) {
+        c.hidden = !(f === "all" || c.dataset.project === f);
+        if (!c.hidden) c.querySelectorAll("[data-reveal]").forEach(function (d) { d.classList.add("is-visible"); });
+      });
+    });
+  })();
+</script>

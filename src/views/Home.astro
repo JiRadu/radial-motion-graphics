@@ -1,0 +1,168 @@
+---
+import Base from "../layouts/Base.astro";
+import Rays from "../components/Rays.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import Testimonial from "../components/Testimonial.astro";
+import ProcessSteps from "../components/ProcessSteps.astro";
+import VideoFeature from "../components/VideoFeature.astro";
+import CtaBand from "../components/CtaBand.astro";
+import PostCard from "../components/PostCard.astro";
+import Drawing from "../components/Drawing.astro";
+import { SITE, yearsActive } from "../data/site";
+import { MAIN_SERVICES, serviceById } from "../data/services";
+import { PROJECTS } from "../data/projects";
+import { TESTIMONIALS } from "../data/testimonials";
+import { postsFor } from "../lib/journal";
+import { video } from "../lib/schema";
+import { child, r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const featured = ["bar-stools", "firepit", "hall", "prototype"].map((id) => PROJECTS.find((p) => p.id === id)!);
+const posts = (await postsFor(lang)).slice(0, 3);
+const custom = serviceById("custom");
+
+const copy = ro
+  ? {
+      title: "Radial Cons – Confecții metalice la comandă din inox și aluminiu | Târgoviște",
+      description:
+        "Atelier de confecții metalice din Târgoviște, din 1999: mobilier din inox și aluminiu, vetre de foc, structuri metalice, piese din DXF/STEP, debitare și sudură laser.",
+      eyebrow: "Atelier de confecții metalice · Târgoviște · din 1999",
+      lead: "Piese metalice la comandă, lucrate precis și finisate cu grijă. De la idee la piesa finită — totul în atelierul nostru.",
+      seeWork: "Vezi lucrările",
+      facts: [
+        { v: String(SITE.foundingYear), l: `Din ${SITE.foundingYear} — peste ${yearsActive() - 1} de ani de meserie` },
+        { v: "1 atelier", l: "Proiectare, execuție și finisaj în Târgoviște" },
+        { v: "4 procese", l: "Laser CNC, sudură laser, plasmă, îndoire CNC" },
+        { v: "4 materiale", l: "Oțel carbon, inox, aluminiu, corten" },
+      ],
+      whatEyebrow: "Ce facem",
+      whatTitle: "Patru linii, același standard.",
+      whatLead: "Nu suntem un magazin de produse standard. Suntem un atelier care transformă un desen, o schiță sau o idee într-o piesă unicat.",
+      workEyebrow: "Lucrări alese",
+      workTitle: "Din viziune, în realitate.",
+      processEyebrow: "Cum lucrăm",
+      processTitle: "Tot procesul, într-un singur loc.",
+      customLead: "Trimite-ne fișierul DXF sau STEP. Îl verificăm, îți spunem dacă ceva trebuie ajustat și îl transformăm în piesa finită — prototip, unicat sau serie mică.",
+      voices: "Testimoniale",
+      journalEyebrow: "Jurnal",
+      journalTitle: "Din atelier, despre meserie.",
+    }
+  : {
+      title: "Radial Cons – Custom stainless & aluminium metal fabrication | Romania",
+      description:
+        "Metal fabrication workshop in Romania since 1999: stainless and aluminium furniture, corten firepits, steel structures, parts from DXF/STEP, laser cutting and welding.",
+      eyebrow: "Metal fabrication workshop · Târgoviște, Romania · since 1999",
+      lead: "Custom metal work, precisely made and carefully finished. From idea to finished piece — all in our own workshop.",
+      seeWork: "See our work",
+      facts: [
+        { v: String(SITE.foundingYear), l: `Since ${SITE.foundingYear} — over ${yearsActive() - 1} years of craft` },
+        { v: "1 workshop", l: "Design, fabrication and finishing in Târgoviște" },
+        { v: "4 processes", l: "CNC laser, laser welding, plasma, CNC bending" },
+        { v: "4 materials", l: "Carbon steel, stainless, aluminium, corten" },
+      ],
+      whatEyebrow: "What we do",
+      whatTitle: "Four lines, one standard.",
+      whatLead: "We're not a shop selling standard products. We're a workshop that turns a drawing, a sketch or an idea into a one-of-a-kind piece.",
+      workEyebrow: "Selected work",
+      workTitle: "From vision to reality.",
+      processEyebrow: "How we work",
+      processTitle: "The whole process, in one place.",
+      customLead: "Send us your DXF or STEP file. We check it, flag anything that needs adjusting, and turn it into the finished part — prototype, one-off or small batch.",
+      voices: "Testimonials",
+      journalEyebrow: "Journal",
+      journalTitle: "From the workshop, about the craft.",
+    };
+---
+
+<Base lang={lang} title={copy.title} description={copy.description} alternates={ROUTES.home} section="home" jsonLd={[video(lang)]}>
+  <section class="hero home-hero on-dark">
+    <Rays />
+    <div class="container">
+      <div>
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1>{ui.tagline} <span class="accent">{ui.taglineAccent}</span></h1>
+        <span class="goldline" aria-hidden="true"></span>
+        <p class="lead">{copy.lead}</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
+          <a class="btn btn--ghost" href={r("projects", lang)}>{copy.seeWork}</a>
+        </div>
+      </div>
+      <VideoFeature lang={lang} eager />
+    </div>
+  </section>
+
+  <section class="facts" aria-label={ro ? "Pe scurt" : "At a glance"}>
+    <div class="container">
+      <ul>
+        {copy.facts.map((f) => <li><strong>{f.v}</strong><span>{f.l}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow={copy.whatEyebrow} title={copy.whatTitle} lead={copy.whatLead} link={{ href: r("services", lang), label: ui.allServices }} />
+      <div class="grid grid--4">
+        {MAIN_SERVICES.map((s, i) => <ServiceCard service={s} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={copy.workEyebrow} title={copy.workTitle} link={{ href: r("projects", lang), label: ui.allProjects }} />
+      <div class="grid grid--4">
+        {featured.map((p) => <ProjectCard project={p} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow={copy.processEyebrow} title={copy.processTitle} link={{ href: r("process", lang), label: ui.readMore }} />
+      <ProcessSteps lang={lang} />
+    </div>
+  </section>
+
+  <section class="section section--graphite">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">{custom.eyebrow[lang]}</p>
+        <h2>{custom.title[lang]}</h2>
+        <span class="goldline" aria-hidden="true"></span>
+        <p class="lead">{copy.customLead}</p>
+        <ul class="checklist" style="margin-top:24px">
+          {custom.offer[lang].slice(0, 3).map((o) => <li>{o.title}</li>)}
+        </ul>
+        <div class="btn-row"><a class="btn btn--primary" href={child("services", lang, custom.slug[lang])}>{ui.readMore}</a></div>
+      </div>
+      <div style="aspect-ratio:1/1"><Drawing name="part" label={`${ui.illustration}: DXF / STEP`} /></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow={copy.voices} title={ui.testimonialsTitle} link={{ href: r("testimonials", lang), label: ui.seeAll }} />
+      <div class="grid grid--3">
+        {TESTIMONIALS.slice(0, 3).map((item) => <Testimonial item={item} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={copy.journalEyebrow} title={copy.journalTitle} link={{ href: r("journal", lang), label: ui.seeAll }} />
+      <div class="grid grid--3">
+        {posts.map((p) => <PostCard post={p} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>

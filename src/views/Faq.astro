@@ -1,0 +1,45 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { FAQ } from "../data/faq";
+import { faqPage } from "../lib/schema";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.faq, href: r("faq", lang) },
+];
+const all = FAQ[lang].flatMap((g) => g.items);
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Întrebări frecvente — confecții metalice la comandă | Radial Cons" : "FAQ — custom metal fabrication | Radial Cons"}
+  description={ro
+    ? "Răspunsuri despre atelierul Radial Cons din Târgoviște: materiale, finisaje, fișiere DXF/STEP, oferte, livrare și montaj."
+    : "Answers about the Radial Cons workshop in Târgoviște, Romania: materials, finishes, DXF/STEP files, quotes, delivery and installation."}
+  alternates={ROUTES.faq}
+  section="faq"
+  jsonLd={[faqPage(all, lang)]}
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.faq} title={ro ? "Întrebări frecvente." : "Frequently asked questions."}
+    lead={ro ? "Pe scurt, tot ce ne întreabă clienții înainte de o comandă." : "In short, everything clients ask us before an order."} />
+
+  <section class="section">
+    <div class="container narrow faq">
+      {FAQ[lang].map((g) => (
+        <div class="faq-group">
+          <h2>{g.group}</h2>
+          {g.items.map((it) => <details><summary>{it.q}</summary><p>{it.a}</p></details>)}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={ro ? "N-ai găsit răspunsul?" : "Didn't find your answer?"} text={ro ? "Sună-ne sau scrie-ne. Îți răspundem direct, fără roboți." : "Call or email us. You'll get a direct answer from a person."} />
+</Base>

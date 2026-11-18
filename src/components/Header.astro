@@ -1,0 +1,41 @@
+---
+import { r, t, type Alternates, type Lang, type RouteKey, type NavKey } from "../i18n/ui";
+
+interface Props { lang: Lang; alternates: Alternates; section?: RouteKey }
+const { lang, alternates, section } = Astro.props;
+const ui = t(lang);
+const other: Lang = lang === "ro" ? "en" : "ro";
+const items: NavKey[] = ["services", "projects", "process", "about", "journal", "contact"];
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href={r("home", lang)} aria-label={`Radial Cons — ${ui.home}`}>
+      <img src="/brand/radialcons-logo-orizontal-color.svg" alt="Radial Cons" width="168" height="65" />
+    </a>
+    <nav class="nav" aria-label={ui.menu}>
+      <ul>
+        {items.map((k) => (
+          <li><a href={r(k, lang)} aria-current={section === k ? "page" : undefined}>{ui.nav[k]}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="lang" href={alternates[other]} hreflang={other} lang={other} title={ui.otherLang}>{ui.otherLangShort}</a>
+      <a class="btn btn--primary header-cta on-dark" href={r("contact", lang)}>{ui.cta}</a>
+    </div>
+    <details class="menu">
+      <summary><span class="bars" aria-hidden="true"></span>{ui.menu}</summary>
+      <div class="menu-panel on-dark">
+        <ul>
+          {items.map((k) => (
+            <li><a href={r(k, lang)} aria-current={section === k ? "page" : undefined}>{ui.nav[k]}</a></li>
+          ))}
+          <li><a href={r("testimonials", lang)}>{ui.nav.testimonials}</a></li>
+          <li><a href={r("faq", lang)}>{ui.nav.faq}</a></li>
+        </ul>
+        <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
+      </div>
+    </details>
+  </div>
+</header>

@@ -1,0 +1,34 @@
+---
+/**
+ * The motion-graphics presentation. Tradeoffs handled here:
+ * - nothing downloads until the visitor clicks (preload="none", poster is a ~40 KB WebP);
+ * - no autoplay (the video has sound, and the brandbook rules out self-moving animation);
+ * - native <video> controls, no player library.
+ */
+import { t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang; eager?: boolean }
+const { lang, eager = false } = Astro.props;
+const ui = t(lang);
+const src = `/media/radial-cons-prezentare-${lang}.mp4`;
+const poster = `/media/scene/intro-${lang}.webp`;
+---
+
+<div class="video-card" data-video>
+  <img src={poster} alt="" width="1280" height="720" loading={eager ? "eager" : "lazy"} decoding="async" fetchpriority={eager ? "high" : "auto"} />
+  <button type="button" data-src={src} data-poster={poster} aria-label={ui.watchVideo}>
+    <span class="play"><i aria-hidden="true"></i><span>{ui.watchVideo}<small>{ui.videoNote}</small></span></span>
+  </button>
+  <noscript><video src={src} poster={poster} controls preload="none" playsinline width="1280" height="720"></video></noscript>
+</div>
+
+<script is:inline>
+  document.querySelectorAll("[data-video] button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var v = document.createElement("video");
+      v.src = btn.dataset.src; v.poster = btn.dataset.poster; v.controls = true; v.playsInline = true; v.autoplay = true;
+      v.setAttribute("width", "1280"); v.setAttribute("height", "720");
+      var card = btn.parentElement; card.innerHTML = ""; card.appendChild(v); v.focus();
+    }, { once: true });
+  });
+</script>

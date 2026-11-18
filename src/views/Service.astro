@@ -1,0 +1,112 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Drawing from "../components/Drawing.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import Testimonial from "../components/Testimonial.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SectionHead from "../components/SectionHead.astro";
+import type { Service } from "../data/services";
+import { projectsByService } from "../data/projects";
+import { TESTIMONIALS } from "../data/testimonials";
+import { faqPage, service as serviceSchema } from "../lib/schema";
+import { child, r, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang; service: Service }
+const { lang, service: s } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const href = child("services", lang, s.slug[lang]);
+const alternates = { ro: child("services", "ro", s.slug.ro), en: child("services", "en", s.slug.en) };
+const projects = projectsByService(s.id);
+const quote = TESTIMONIALS.find((q) => q.service === s.id);
+const sceneByService: Record<string, string> = { furniture: "furniture", structures: "structures", custom: "custom", technology: "technology" };
+const scene = sceneByService[s.id];
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.services, href: r("services", lang) },
+  { name: s.short[lang], href },
+];
+const techDrawings = ["laser", "weld", "plasma", "bend"] as const;
+const jsonLd = [
+  serviceSchema({ name: s.short[lang], description: s.seoDescription[lang], href, lang, offers: s.offer[lang].map((o) => o.title) }),
+  faqPage(s.faq[lang], lang),
+];
+---
+
+<Base lang={lang} title={s.seoTitle[lang]} description={s.seoDescription[lang]} alternates={alternates} section="services" jsonLd={jsonLd}>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={s.eyebrow[lang]} title={s.title[lang]} lead={s.summary[lang]}>
+    <div class="btn-row"><a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a></div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="prose">
+        {s.intro[lang].map((p) => <p>{p}</p>)}
+        <p><strong>{ro ? "Pentru cine:" : "Who it's for:"}</strong> {s.forWhom[lang]}</p>
+      </div>
+      <div style="aspect-ratio:1/1"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} /></div>
+    </div>
+  </section>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={ro ? "Ce oferim" : "What we offer"} title={ro ? "Ce putem face pentru tine." : "What we can make for you."} />
+      {s.id === "technology" ? (
+        <div class="grid grid--4">
+          {s.offer[lang].map((o, i) => (
+            <article class="card">
+              <div class="card__media card__media--wide"><Drawing name={techDrawings[i]} label={`${ui.illustration}: ${o.title}`} /></div>
+              <div class="card__body"><span class="card__meta">{String(i + 1).padStart(2, "0")}</span><h3>{o.title}</h3><p>{o.text}</p></div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <ul class="features">
+          {s.offer[lang].map((o, i) => (
+            <li data-fade><span class="num">{String(i + 1).padStart(2, "0")}</span><div><h3>{o.title}</h3><p>{o.text}</p></div></li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  {scene && (
+    <section class="section section--dark">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">{ro ? "Din prezentarea video" : "From our video presentation"}</p>
+          <h2>{s.title[lang]}</h2>
+          <span class="goldline" aria-hidden="true"></span>
+          <p class="lead">{ro ? "Un cadru din prezentarea animată a atelierului. Vezi tot clipul pe pagina principală." : "A frame from the workshop's animated presentation. Watch the whole clip on the home page."}</p>
+          <a class="link-arrow" href={r("home", lang)}>{ui.watchVideo}</a>
+        </div>
+        <img class="scene-img" src={`/media/scene/${scene}-${lang}.webp`} alt={ro ? `Cadru din prezentarea video Radial Cons: ${s.short.ro}` : `Frame from the Radial Cons video: ${s.short.en}`} width="1280" height="720" loading="lazy" decoding="async" />
+      </div>
+    </section>
+  )}
+
+  {projects.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <SectionHead eyebrow={ui.nav.projects} title={ui.relatedProjects} link={{ href: r("projects", lang), label: ui.allProjects }} />
+        <div class="grid grid--3">{projects.map((p) => <ProjectCard project={p} lang={lang} />)}</div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--cream">
+    <div class="container split split--top">
+      <div class="faq">
+        <p class="eyebrow">{ui.nav.faq}</p>
+        <h2>{ro ? "Întrebări despre acest serviciu." : "Questions about this service."}</h2>
+        <div style="margin-top:28px">
+          {s.faq[lang].map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+        </div>
+      </div>
+      {quote && <Testimonial item={quote} lang={lang} />}
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>

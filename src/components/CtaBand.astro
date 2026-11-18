@@ -1,0 +1,32 @@
+---
+import Rays from "./Rays.astro";
+import { SITE } from "../data/site";
+import { r, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang; title?: string; text?: string; rays?: boolean }
+const { lang, title, text, rays = false } = Astro.props;
+const ui = t(lang);
+const defaultText = lang === "ro"
+  ? "Ai un proiect aparte? Trimite-ne o schiță, o poză sau un fișier DXF/STEP și îți răspundem cu o ofertă."
+  : "Have a special project? Send us a sketch, a photo or a DXF/STEP file and we'll come back with a quote.";
+---
+
+<section class="section section--dark cta-band">
+  {rays && <Rays />}
+  <div class="container">
+    <div>
+      <p class="eyebrow">{ui.cta}</p>
+      <h2>{title ?? ui.closing}</h2>
+      <p class="lead" style="margin-top:16px">{text ?? defaultText}</p>
+      <div class="contact-inline">
+        <a href={SITE.phoneMobile.href}>{SITE.phoneMobile.display}</a>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <span>{SITE.address.city}, {SITE.address.county}</span>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:0">
+      <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
+      <a class="btn btn--ghost" href={SITE.phoneMobile.href}>{ui.call}</a>
+    </div>
+  </div>
+</section>

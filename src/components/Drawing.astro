@@ -1,0 +1,26 @@
+---
+import { DRAWINGS, type DrawingKey } from "./drawings";
+
+interface Props {
+  name: DrawingKey;
+  label: string;
+  class?: string;
+  /** "dark" = graphite blueprint panel, "light" = cream panel. */
+  tone?: "dark" | "light";
+}
+const { name, label, class: cls = "", tone = "dark" } = Astro.props;
+const drawing = DRAWINGS[name];
+// Stroke widths are in user units; scale them so 200- and 400-unit drawings look the same.
+const scale = Number(drawing.viewBox.split(" ")[2]) / 400;
+---
+
+<div class:list={["blueprint", `blueprint--${tone}`, cls]} data-reveal>
+  <svg viewBox={drawing.viewBox} role="img" aria-label={label} class="draw" focusable="false" style={`--s:${scale}`}>
+    <title>{label}</title>
+    {
+      drawing.strokes.map((s, i) => (
+        <path d={s.d} pathLength="1" class={`k-${s.kind ?? "line"}`} style={`--i:${i}`} />
+      ))
+    }
+  </svg>
+</div>

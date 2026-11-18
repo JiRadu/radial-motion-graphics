@@ -1,0 +1,63 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import PostCard from "../components/PostCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { render } from "astro:content";
+import { counterpart, formatDate, postsFor, readingMinutes, type Post } from "../lib/journal";
+import { serviceById } from "../data/services";
+import { article } from "../lib/schema";
+import { child, r, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang; post: Post }
+const { lang, post } = Astro.props;
+const ui = t(lang);
+const { Content } = await render(post);
+const other = await counterpart(post);
+const href = child("journal", lang, post.data.slug);
+const otherLang: Lang = lang === "ro" ? "en" : "ro";
+const alternates = {
+  [lang]: href,
+  [otherLang]: other ? child("journal", otherLang, other.data.slug) : r("journal", otherLang),
+} as Record<Lang, string>;
+const svc = serviceById(post.data.service);
+const more = (await postsFor(lang)).filter((p) => p.id !== post.id).slice(0, 3);
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.journal, href: r("journal", lang) },
+  { name: post.data.title, href },
+];
+---
+
+<Base
+  lang={lang}
+  title={`${post.data.title} | Radial Cons`}
+  description={post.data.description}
+  alternates={alternates}
+  section="journal"
+  ogType="article"
+  jsonLd={[article({ title: post.data.title, description: post.data.description, href, date: post.data.date, lang, image: `/og/radial-cons-${lang}.png` })]}
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.journal} title={post.data.title} lead={post.data.description}>
+    <p class="muted" style="margin-top:20px;font-size:14px;color:var(--rc-otel)">
+      <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date, lang)}</time> · {readingMinutes(post.body)} {ui.minutes}
+    </p>
+  </PageHero>
+
+  <article class="section">
+    <div class="container narrow prose">
+      <Content />
+      <hr style="border:0;border-top:1px solid var(--rc-linie);margin:48px 0 24px" />
+      <p class="muted" style="font-size:16px">{ui.relatedServices}: <a href={child("services", lang, svc.slug[lang])}>{svc.short[lang]}</a></p>
+    </div>
+  </article>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={ui.nav.journal} title={lang === "ro" ? "Mai citește." : "Keep reading."} link={{ href: r("journal", lang), label: ui.seeAll }} />
+      <div class="grid grid--3">{more.map((p) => <PostCard post={p} lang={lang} />)}</div>
+    </div>
+  </section>
+  <CtaBand lang={lang} />
+</Base>

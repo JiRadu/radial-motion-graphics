@@ -1,0 +1,42 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Testimonial from "../components/Testimonial.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { TESTIMONIALS } from "../data/testimonials";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.testimonials, href: r("testimonials", lang) },
+];
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Testimoniale — ce spun clienții Radial Cons" : "Testimonials — what Radial Cons clients say"}
+  description={ro
+    ? "Păreri ale clienților despre lucrările Radial Cons: mobilier HoReCa din inox, vetre de foc, structuri metalice, prototipuri și debitare laser."
+    : "Client feedback on Radial Cons work: stainless hospitality furniture, firepits, steel structures, prototypes and laser cutting."}
+  alternates={ROUTES.testimonials}
+  section="testimonials"
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.testimonials} title={ui.testimonialsTitle}
+    lead={ro
+      ? "Restaurante, designeri, ingineri, firme de construcții și familii. Oameni diferiți, același standard."
+      : "Restaurants, designers, engineers, construction firms and families. Different people, one standard."} />
+
+  <section class="section section--cream">
+    <div class="container">
+      <div class="grid grid--3">
+        {TESTIMONIALS.map((item) => <Testimonial item={item} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={ro ? "Vrei să fii următorul?" : "Want to be next?"} />
+</Base>

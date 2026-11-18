@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import PostCard from "../components/PostCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { postsFor } from "../lib/journal";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const posts = await postsFor(lang);
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.journal, href: r("journal", lang) },
+];
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Jurnal — din atelier, despre confecții metalice | Radial Cons" : "Journal — from the workshop, about metal fabrication | Radial Cons"}
+  description={ro
+    ? "Articole din atelierul Radial Cons: finisaj oglindă pe inox, cum alegi între inox, aluminiu și corten, sudura laser, procesul de execuție, ce să trimiți pentru o ofertă."
+    : "Articles from the Radial Cons workshop: mirror finish on stainless, choosing between stainless, aluminium and corten, laser welding, our process, what to send for a quote."}
+  alternates={ROUTES.journal}
+  section="journal"
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.journal} title={ro ? "Din atelier," : "From the workshop,"} accent={ro ? "despre meserie." : "about the craft."}
+    lead={ro ? "Materiale, finisaje, tehnologie și sfaturi practice — scrise de cei care lucrează metalul în fiecare zi." : "Materials, finishes, technology and practical advice — written by people who work metal every day."} />
+  <section class="section section--cream">
+    <div class="container">
+      <div class="grid grid--3">{posts.map((p) => <PostCard post={p} lang={lang} headingLevel="h2" />)}</div>
+    </div>
+  </section>
+  <CtaBand lang={lang} />
+</Base>

@@ -1,0 +1,6 @@
+# Radial Cons — radialcons.ro
+# All crawlers, including AI assistants, are welcome to read this site.
+User-agent: *
+Allow: /
+
+Sitemap: https://radialcons.ro/sitemap-index.xml

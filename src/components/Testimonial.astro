@@ -1,0 +1,15 @@
+---
+import type { Testimonial } from "../data/testimonials";
+import type { Lang } from "../i18n/ui";
+
+interface Props { item: Testimonial; lang: Lang }
+const { item, lang } = Astro.props;
+---
+
+<figure class="quote" data-fade data-mock={item.mock ? "true" : undefined}>
+  <blockquote><p class="mb-0">{item.quote[lang]}</p></blockquote>
+  <figcaption>
+    <span class="avatar" aria-hidden="true">{item.initials.replace(/\./g, "")}</span>
+    <span><strong>{item.initials}</strong><span>{item.role[lang]}</span></span>
+  </figcaption>
+</figure>

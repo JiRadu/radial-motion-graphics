@@ -1,0 +1,136 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import VideoFeature from "../components/VideoFeature.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { SITE, yearsActive } from "../data/site";
+import { video } from "../lib/schema";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.about, href: r("about", lang) },
+];
+const values = ro
+  ? [
+      { t: "Precizie", d: "Măsurăm de două ori, tăiem o dată. Cotele contează la o balustradă la fel de mult ca la o hală." },
+      { t: "Finisaj", d: "O piesă nu e gata până nu arată bine din orice unghi. Îmbinările se finisează, nu se ascund." },
+      { t: "Sinceritate", d: "Îți spunem ce se poate și ce nu, ce material se potrivește și unde poți economisi." },
+      { t: "Răspundere", d: "Tot procesul e la noi, așa că și rezultatul e al nostru." },
+    ]
+  : [
+      { t: "Precision", d: "Measure twice, cut once. Dimensions matter on a railing as much as on a hall." },
+      { t: "Finish", d: "A piece isn't done until it looks right from every angle. Joints get finished, not hidden." },
+      { t: "Honesty", d: "We tell you what's possible and what isn't, which material fits and where you can save." },
+      { t: "Ownership", d: "The whole process is ours, so the result is too." },
+    ];
+const timeline = ro
+  ? [
+      { y: String(SITE.foundingYear), t: "Înființare", d: "Radial Cons SRL se înființează în Târgoviște, județul Dâmbovița." },
+      { y: "Atelier", t: "Totul sub același acoperiș", d: `Proiectare, execuție, finisaj și pregătire pentru montaj, în ${SITE.address.street}.` },
+      { y: "4 linii", t: "De la mobilier la hale", d: "Mobilier și vetre de foc, structuri metalice, producție la comandă și tehnologie laser și CNC." },
+      { y: "Azi", t: "Laser și CNC", d: "Debitare laser CNC, sudură laser, plasmă și îndoire CNC — precizie la fiecare piesă." },
+    ]
+  : [
+      { y: String(SITE.foundingYear), t: "Founded", d: "Radial Cons SRL is founded in Târgoviște, Dâmbovița County, Romania." },
+      { y: "Workshop", t: "Everything under one roof", d: `Design, fabrication, finishing and preparation for installation, at ${SITE.address.street}.` },
+      { y: "4 lines", t: "From furniture to halls", d: "Furniture and firepits, steel structures, custom manufacturing and laser & CNC technology." },
+      { y: "Today", t: "Laser & CNC", d: "CNC laser cutting, laser welding, plasma and CNC bending — precision on every part." },
+    ];
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Despre noi — atelier de confecții metalice din Târgoviște, din 1999 | Radial Cons" : "About — metal fabrication workshop in Târgoviște since 1999 | Radial Cons"}
+  description={ro
+    ? `Radial Cons SRL este un atelier de confecții metalice din Târgoviște, Dâmbovița, înființat în ${SITE.foundingYear}. Atelier mic, precizie de oțel: mobilier, structuri, producție la comandă.`
+    : `Radial Cons SRL is a metal fabrication workshop in Târgoviște, Dâmbovița, Romania, founded in ${SITE.foundingYear}. Small workshop, serious steel: furniture, structures, custom manufacturing.`}
+  alternates={ROUTES.about}
+  section="about"
+  jsonLd={[video(lang)]}
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.about} title={ui.tagline} accent={ui.taglineAccent}
+    lead={ro
+      ? `Din ${SITE.foundingYear}, în Târgoviște, transformăm desene, schițe și idei în piese metalice care arată la fel de bine cum rezistă.`
+      : `Since ${SITE.foundingYear}, in Târgoviște, we've turned drawings, sketches and ideas into metal pieces that look as good as they last.`} />
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="prose">
+        <h2 class="mt-0">{ro ? "Un atelier, nu o fabrică." : "A workshop, not a factory."}</h2>
+        {ro ? (
+          <>
+            <p>Radial Cons SRL este un atelier de confecții metalice din Târgoviște, județul Dâmbovița. Lucrăm din {SITE.foundingYear} — de peste {yearsActive() - 1} de ani — și facem un singur lucru: piese metalice la comandă, lucrate precis și finisate cu grijă.</p>
+            <p>„Radial" vine de la ideea din logo: totul pornește dintr-un centru. Fiecare lucrare este construită în jurul unei idei — a ta — și crește de acolo, rază cu rază, până la piesa finită.</p>
+            <p>Suntem un atelier mic, și ne place așa. Înseamnă că vorbești direct cu oamenii care îți fac piesa, că știm fiecare proiect pe dinafară și că nimic nu pleacă din atelier fără să fi trecut prin mâinile noastre.</p>
+          </>
+        ) : (
+          <>
+            <p>Radial Cons SRL is a metal fabrication workshop in Târgoviște, Dâmbovița County, Romania. We've been working since {SITE.foundingYear} — more than {yearsActive() - 1} years — and we do one thing: custom metal work, precisely made and carefully finished.</p>
+            <p>"Radial" comes from the idea in our logo: everything starts from a centre. Every job is built around an idea — yours — and grows from there, ray by ray, into the finished piece.</p>
+            <p>We're a small workshop, and we like it that way. It means you talk directly to the people making your piece, we know every project inside out, and nothing leaves the workshop without passing through our hands.</p>
+          </>
+        )}
+      </div>
+      <div>
+        <VideoFeature lang={lang} />
+        <p class="figure-note">{ui.videoNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={ro ? "Pe scurt" : "In short"} title={ro ? "Rază cu rază." : "Ray by ray."} />
+      <ol class="steps">
+        {timeline.map((s, i) => (
+          <li data-fade style={`transition-delay:${i * 90}ms`}>
+            <span class="num">{s.y}</span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--graphite">
+    <div class="container">
+      <SectionHead eyebrow={ro ? "Ce ne ghidează" : "What guides us"} title={ro ? "Patru reguli de atelier." : "Four workshop rules."} />
+      <div class="grid grid--4">
+        {values.map((v, i) => (
+          <div data-fade style={`transition-delay:${i * 80}ms`}>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <h3 style="margin-top:10px">{v.t}</h3>
+            <p class="muted">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split split--top">
+      <div>
+        <p class="eyebrow">{ui.company}</p>
+        <h2>{ro ? "Date de firmă." : "Company details."}</h2>
+        <span class="goldline" aria-hidden="true"></span>
+      </div>
+      <dl class="specs" style="grid-template-columns:repeat(2,1fr);margin:0">
+        <div><dt>{ro ? "Denumire" : "Name"}</dt><dd>{SITE.legalName}</dd></div>
+        <div><dt>{ro ? "Înființată" : "Founded"}</dt><dd>{SITE.foundingYear}</dd></div>
+        <div><dt>CUI</dt><dd>{SITE.vatId}</dd></div>
+        <div><dt>{ro ? "Nr. Reg. Com." : "Trade register"}</dt><dd>{SITE.regCom}</dd></div>
+        <div><dt>{ui.address}</dt><dd>{SITE.address.street}, {SITE.address.city}</dd></div>
+        <div><dt>{ro ? "Materiale" : "Materials"}</dt><dd>{SITE.materials[lang].join(", ")}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>

@@ -1,0 +1,17 @@
+---
+import type { Lang } from "../i18n/ui";
+import { STEPS } from "../data/process";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+---
+
+<ol class="steps">
+  {STEPS[lang].map((s, i) => (
+    <li data-fade style={`transition-delay:${i * 90}ms`}>
+      <span class="num">{String(i + 1).padStart(2, "0")}</span>
+      <h3>{s.t}</h3>
+      <p>{s.d}</p>
+    </li>
+  ))}
+</ol>

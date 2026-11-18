@@ -1,0 +1,75 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Drawing from "../components/Drawing.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { PROJECTS, type Project } from "../data/projects";
+import { serviceById } from "../data/services";
+import { creativeWork } from "../lib/schema";
+import { child, r, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang; project: Project }
+const { lang, project: p } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const svc = serviceById(p.service);
+const href = child("projects", lang, p.slug[lang]);
+const alternates = { ro: child("projects", "ro", p.slug.ro), en: child("projects", "en", p.slug.en) };
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.projects, href: r("projects", lang) },
+  { name: p.title[lang], href },
+];
+const others = PROJECTS.filter((x) => x.id !== p.id).sort((a, b) => Number(b.service === p.service) - Number(a.service === p.service)).slice(0, 3);
+---
+
+<Base
+  lang={lang}
+  title={`${p.title[lang]} | Radial Cons`}
+  description={`${p.summary[lang]} ${ui.material}: ${p.material[lang]}. ${ui.finish}: ${p.finish[lang]}.`}
+  alternates={alternates}
+  section="projects"
+  jsonLd={[creativeWork({ name: p.title[lang], description: p.summary[lang], href, lang, material: p.material[lang] })]}
+>
+  <PageHero lang={lang} crumbs={crumbs} eyebrow={svc.short[lang]} title={p.headline[lang]} lead={p.summary[lang]} />
+
+  <section class="section">
+    <div class="container">
+      <dl class="specs">
+        <div><dt>{ui.category}</dt><dd><a href={child("services", lang, svc.slug[lang])}>{svc.short[lang]}</a></dd></div>
+        <div><dt>{ui.material}</dt><dd>{p.material[lang]}</dd></div>
+        <div><dt>{ui.finish}</dt><dd>{p.finish[lang]}</dd></div>
+        <div><dt>{ui.location}</dt><dd>{p.setting[lang]}</dd></div>
+      </dl>
+      <div class="split split--wide-left split--top">
+        <div>
+          <h2>{p.title[lang]}</h2>
+          <div class="prose">{p.story[lang].map((s) => <p>{s}</p>)}</div>
+          <h3 style="margin-top:36px">{ui.scope}</h3>
+          <ol class="features" style="margin-top:12px">
+            {p.scope[lang].map((s, i) => <li><span class="num">{String(i + 1).padStart(2, "0")}</span><div><p style="color:inherit;font-size:16px">{s}</p></div></li>)}
+          </ol>
+        </div>
+        <div>
+          {p.photos?.length
+            ? p.photos.map((ph) => <img src={ph.src} alt={ph.alt[lang]} loading="lazy" width="800" height="1000" style="margin-bottom:16px" />)
+            : <>
+                <div style="aspect-ratio:4/5"><Drawing name={p.drawing} label={`${ui.illustration}: ${p.title[lang]}`} /></div>
+                <p class="figure-note">{ro ? "Desen tehnic ilustrativ. Fotografiile lucrării vor fi adăugate în curând." : "Illustrative technical drawing. Project photos coming soon."}</p>
+              </>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead eyebrow={ui.nav.projects} title={ui.otherProjects} link={{ href: r("projects", lang), label: ui.allProjects }} />
+      <div class="grid grid--3">{others.map((o) => <ProjectCard project={o} lang={lang} />)}</div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={ro ? "Vrei ceva asemănător?" : "Want something similar?"} />
+</Base>

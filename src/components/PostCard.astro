@@ -1,0 +1,20 @@
+---
+import Drawing from "./Drawing.astro";
+import { formatDate, type Post } from "../lib/journal";
+import { child, t, type Lang } from "../i18n/ui";
+
+interface Props { post: Post; lang: Lang; headingLevel?: "h2" | "h3" }
+const { post, lang, headingLevel = "h3" } = Astro.props;
+const H = headingLevel;
+const ui = t(lang);
+---
+
+<a class="card post-card" href={child("journal", lang, post.data.slug)}>
+  <div class="card__media card__media--wide"><Drawing name={post.data.drawing} label={`${ui.illustration}: ${post.data.title}`} tone="light" /></div>
+  <div class="card__body">
+    <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date, lang)}</time>
+    <H>{post.data.title}</H>
+    <p>{post.data.description}</p>
+    <span class="link-arrow">{ui.readMore}</span>
+  </div>
+</a>

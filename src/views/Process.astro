@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Drawing from "../components/Drawing.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { STEPS } from "../data/process";
+import { serviceById } from "../data/services";
+import { r, ROUTES, t, type Lang } from "../i18n/ui";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const ro = lang === "ro";
+const tech = serviceById("technology");
+const crumbs = [
+  { name: ui.home, href: r("home", lang) },
+  { name: ui.nav.process, href: r("process", lang) },
+];
+const drawings = ["part", "laser", "stool", "hall"] as const;
+const details = ro
+  ? [
+      ["Ne trimiți ideea, schița, poza sau fișierul DXF/STEP.", "Stabilim materialul, finisajul și dimensiunile.", "Primești oferta și desenul de execuție."],
+      ["Debitare laser CNC sau cu plasmă.", "Îndoire CNC pe abkant.", "Sudură laser sau clasică, după material și grosime."],
+      ["Polizarea și verificarea îmbinărilor.", "Luciu oglindă, periat sau vopsit.", "Verificare finală a cotelor și a aspectului."],
+      ["Ambalare care protejează finisajul.", "Livrare în toată țara.", "Montaj la fața locului, când e nevoie."],
+    ]
+  : [
+      ["You send the idea, sketch, photo or DXF/STEP file.", "We agree material, finish and dimensions.", "You receive the quote and the fabrication drawing."],
+      ["CNC laser or plasma cutting.", "CNC press-brake bending.", "Laser or conventional welding, depending on material and thickness."],
+      ["Grinding and checking every joint.", "Mirror polish, brushed or painted.", "Final check of dimensions and appearance."],
+      ["Packing that protects the finish.", "Delivery across Romania.", "On-site installation when needed."],
+    ];
+const why = ro
+  ? [
+      { t: "Un singur loc", d: "Proiectare, execuție, finisaj și montaj — fără intermediari." },
+      { t: "Un singur responsabil", d: "Vorbești direct cu cei care fac piesa." },
+      { t: "Precizie repetabilă", d: "Tehnologia laser și CNC dă aceeași piesă de fiecare dată." },
+      { t: "Meserie din 1999", d: "Peste 25 de ani de lucru cu metalul, în Târgoviște." },
+    ]
+  : [
+      { t: "One place", d: "Design, fabrication, finishing and installation — no middlemen." },
+      { t: "One point of contact", d: "You talk directly to the people making the piece." },
+      { t: "Repeatable precision", d: "Laser and CNC technology produce the same part every time." },
+      { t: "Craft since 1999", d: "Over 25 years working metal in Târgoviște." },
+    ];
+---
+
+<Base
+  lang={lang}
+  title={ro ? "Cum lucrăm — de la proiectare la montaj | Radial Cons" : "How we work — from design to installation | Radial Cons"}
+  description={ro
+    ? "Procesul Radial Cons în 4 pași: proiectare, execuție metalică (debitare laser, îndoire CNC, sudură laser), finisaj și livrare cu montaj. Totul în atelierul din Târgoviște."
+    : "The Radial Cons process in 4 steps: design, fabrication (laser cutting, CNC bending, laser welding), finishing, delivery and installation. All in our Târgoviște workshop."}
+  alternates={ROUTES.process}
+  section="process"
+>
+  <PageHero
+    lang={lang}
+    crumbs={crumbs}
+    eyebrow={ui.nav.process}
+    title={ro ? "De la piesa brută" : "From raw part"}
+    accent={ro ? "la rezultatul final." : "to finished result."}
+    lead={ro
+      ? "Patru etape, un singur atelier. Așa ne asigurăm că fiecare piesă arată la fel de bine cum rezistă."
+      : "Four stages, one workshop. That's how we make sure every piece looks as good as it holds up."}
+  />
+
+  {STEPS[lang].map((s, i) => (
+    <section class:list={["section", { "section--cream": i % 2 === 1 }]}>
+      <div class="container split">
+        <div style={i % 2 === 1 ? "order:2" : undefined}>
+          <p class="eyebrow">{String(i + 1).padStart(2, "0")} / 04</p>
+          <h2>{s.t}.</h2>
+          <span class="goldline" aria-hidden="true"></span>
+          <p class="lead">{s.d}</p>
+          <ul class="checklist" style="margin-top:24px">{details[i].map((d) => <li>{d}</li>)}</ul>
+        </div>
+        <div style="aspect-ratio:4/3"><Drawing name={drawings[i]} label={`${ui.illustration}: ${s.t}`} tone={i % 2 === 1 ? "dark" : "light"} /></div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section section--graphite">
+    <div class="container">
+      <SectionHead eyebrow={tech.eyebrow[lang]} title={tech.title[lang]} link={{ href: `${r("services", lang)}${tech.slug[lang]}/`, label: ui.readMore }} />
+      <div class="grid grid--4">
+        {why.map((w, i) => (
+          <div data-fade style={`transition-delay:${i * 80}ms`}>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <h3 style="margin-top:10px">{w.t}</h3>
+            <p class="muted">{w.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
