@@ -11,7 +11,6 @@ export const SITE = {
   regCom: "J15/7/1999",
   euid: "ROONRC.J1999000007155",
   phoneMobile: { display: "0744 704 446", href: "tel:+40744704446", intl: "+40 744 704 446" },
-  phoneFixed: { display: "0245 221 024", href: "tel:+40245221024", intl: "+40 245 221 024" },
   email: "radialcons@gmail.com",
   address: {
     street: "Calea Câmpulung nr. 121",

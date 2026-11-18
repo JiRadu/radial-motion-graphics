@@ -37,7 +37,6 @@ export function organization(lang: Lang) {
     areaServed: [{ "@type": "Country", name: "Romania" }],
     contactPoint: [
       { "@type": "ContactPoint", telephone: SITE.phoneMobile.intl, email: SITE.email, contactType: "sales", availableLanguage: ["ro", "en"] },
-      { "@type": "ContactPoint", telephone: SITE.phoneFixed.intl, contactType: "customer service", availableLanguage: ["ro"] },
     ],
     sameAs: [SITE.social.facebook],
     knowsAbout: [

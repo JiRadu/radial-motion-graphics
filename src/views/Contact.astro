@@ -39,8 +39,7 @@ const mailto = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body
       <div>
         <div class="contact-cards">
           <a class="contact-card" href={SITE.phoneMobile.href}><span>{ui.phoneMobile}</span><strong>{ro ? SITE.phoneMobile.display : SITE.phoneMobile.intl}</strong></a>
-          <a class="contact-card" href={SITE.phoneFixed.href}><span>{ui.phoneFixed}</span><strong>{ro ? SITE.phoneFixed.display : SITE.phoneFixed.intl}</strong></a>
-          <a class="contact-card" href={mailto} style="grid-column:1/-1"><span>{ui.email}</span><strong>{SITE.email}</strong></a>
+          <a class="contact-card" href={mailto}><span>{ui.email}</span><strong>{SITE.email}</strong></a>
           <a class="contact-card" href={SITE.mapsUrl} target="_blank" rel="noopener" style="grid-column:1/-1">
             <span>{ui.address}</span>
             <strong>{SITE.address.street}</strong>

@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
     "Key facts:",
     `- Legal name: ${SITE.legalName} · VAT/CUI: ${SITE.vatId} · Trade register: ${SITE.regCom}`,
     `- Address: ${SITE.address.street}, ${SITE.address.postalCode} ${SITE.address.city}, ${SITE.address.county}, Romania`,
-    `- Phone: ${SITE.phoneMobile.intl} (mobile), ${SITE.phoneFixed.intl} (landline) · Email: ${SITE.email}`,
+    `- Phone: ${SITE.phoneMobile.intl} · Email: ${SITE.email}`,
     "- It is a workshop, not a shop: everything is made to order; there are no standard products or online sales.",
     "- Quotes: by email or phone; send what you need made, dimensions, material, finish, sketches or DXF/STEP files, and whether installation is needed.",
     "- Languages: Romanian (default, at /) and English (at /en/).",
