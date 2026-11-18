@@ -47,16 +47,16 @@ const others = PROJECTS.filter((x) => x.id !== p.id).sort((a, b) => Number(b.ser
         <div>
           <h2>{p.title[lang]}</h2>
           <div class="prose">{p.story[lang].map((s) => <p>{s}</p>)}</div>
-          <h3 style="margin-top:36px">{ui.scope}</h3>
-          <ol class="features" style="margin-top:12px">
-            {p.scope[lang].map((s, i) => <li><span class="num">{String(i + 1).padStart(2, "0")}</span><div><p style="color:inherit;font-size:16px">{s}</p></div></li>)}
+          <h3 style="margin-top:32px">{ui.scope}</h3>
+          <ol class="features features--plain" style="margin-top:12px">
+            {p.scope[lang].map((s, i) => <li><span class="num">{String(i + 1).padStart(2, "0")}</span><div><p>{s}</p></div></li>)}
           </ol>
         </div>
         <div>
           {p.photos?.length
             ? p.photos.map((ph) => <img src={ph.src} alt={ph.alt[lang]} loading="lazy" width="800" height="1000" style="margin-bottom:16px" />)
             : <>
-                <div style="aspect-ratio:4/5"><Drawing name={p.drawing} label={`${ui.illustration}: ${p.title[lang]}`} /></div>
+                <div class="media media--portrait"><Drawing name={p.drawing} label={`${ui.illustration}: ${p.title[lang]}`} /></div>
                 <p class="figure-note">{ro ? "Desen tehnic ilustrativ. Fotografiile lucrării vor fi adăugate în curând." : "Illustrative technical drawing. Project photos coming soon."}</p>
               </>}
         </div>
@@ -67,7 +67,7 @@ const others = PROJECTS.filter((x) => x.id !== p.id).sort((a, b) => Number(b.ser
   <section class="section section--cream">
     <div class="container">
       <SectionHead eyebrow={ui.nav.projects} title={ui.otherProjects} link={{ href: r("projects", lang), label: ui.allProjects }} />
-      <div class="grid grid--3">{others.map((o) => <ProjectCard project={o} lang={lang} />)}</div>
+      <div class="grid grid--3 grid--scroll">{others.map((o) => <ProjectCard project={o} lang={lang} />)}</div>
     </div>
   </section>
 

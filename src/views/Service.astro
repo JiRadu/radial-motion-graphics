@@ -45,7 +45,7 @@ const jsonLd = [
         {s.intro[lang].map((p) => <p>{p}</p>)}
         <p><strong>{ro ? "Pentru cine:" : "Who it's for:"}</strong> {s.forWhom[lang]}</p>
       </div>
-      <div style="aspect-ratio:1/1"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} /></div>
+      <div class="media media--square"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} /></div>
     </div>
   </section>
 
@@ -90,7 +90,7 @@ const jsonLd = [
     <section class="section">
       <div class="container">
         <SectionHead eyebrow={ui.nav.projects} title={ui.relatedProjects} link={{ href: r("projects", lang), label: ui.allProjects }} />
-        <div class="grid grid--3">{projects.map((p) => <ProjectCard project={p} lang={lang} />)}</div>
+        <div class="grid grid--3 grid--scroll">{projects.map((p) => <ProjectCard project={p} lang={lang} />)}</div>
       </div>
     </section>
   )}
@@ -100,7 +100,7 @@ const jsonLd = [
       <div class="faq">
         <p class="eyebrow">{ui.nav.faq}</p>
         <h2>{ro ? "Întrebări despre acest serviciu." : "Questions about this service."}</h2>
-        <div style="margin-top:28px">
+        <div class="faq-list">
           {s.faq[lang].map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
         </div>
       </div>

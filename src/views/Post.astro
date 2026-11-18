@@ -40,7 +40,7 @@ const crumbs = [
   jsonLd={[article({ title: post.data.title, description: post.data.description, href, date: post.data.date, lang, image: `/og/radial-cons-${lang}.png` })]}
 >
   <PageHero lang={lang} crumbs={crumbs} eyebrow={ui.nav.journal} title={post.data.title} lead={post.data.description}>
-    <p class="muted" style="margin-top:20px;font-size:14px;color:var(--rc-otel)">
+    <p class="post-meta">
       <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date, lang)}</time> · {readingMinutes(post.body)} {ui.minutes}
     </p>
   </PageHero>
@@ -48,15 +48,15 @@ const crumbs = [
   <article class="section">
     <div class="container narrow prose">
       <Content />
-      <hr style="border:0;border-top:1px solid var(--line);margin:48px 0 24px" />
-      <p class="muted" style="font-size:16px">{ui.relatedServices}: <a href={child("services", lang, svc.slug[lang])}>{svc.short[lang]}</a></p>
+      <hr class="post-end" />
+      <p class="muted">{ui.relatedServices}: <a href={child("services", lang, svc.slug[lang])}>{svc.short[lang]}</a></p>
     </div>
   </article>
 
   <section class="section section--cream">
     <div class="container">
       <SectionHead eyebrow={ui.nav.journal} title={lang === "ro" ? "Mai citește." : "Keep reading."} link={{ href: r("journal", lang), label: ui.seeAll }} />
-      <div class="grid grid--3">{more.map((p) => <PostCard post={p} lang={lang} />)}</div>
+      <div class="grid grid--3 grid--scroll">{more.map((p) => <PostCard post={p} lang={lang} />)}</div>
     </div>
   </section>
   <CtaBand lang={lang} />

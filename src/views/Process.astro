@@ -69,14 +69,14 @@ const why = ro
   {STEPS[lang].map((s, i) => (
     <section class:list={["section", { "section--cream": i % 2 === 1 }]}>
       <div class="container split">
-        <div style={i % 2 === 1 ? "order:2" : undefined}>
+        <div class:list={[{ flip: i % 2 === 1 }]}>
           <p class="eyebrow">{String(i + 1).padStart(2, "0")} / 04</p>
           <h2>{s.t}.</h2>
           <span class="goldline" aria-hidden="true"></span>
           <p class="lead">{s.d}</p>
           <ul class="checklist" style="margin-top:24px">{details[i].map((d) => <li>{d}</li>)}</ul>
         </div>
-        <div style="aspect-ratio:4/3"><Drawing name={drawings[i]} label={`${ui.illustration}: ${s.t}`} tone={i % 2 === 1 ? "dark" : "light"} /></div>
+        <div class="media media--43"><Drawing name={drawings[i]} label={`${ui.illustration}: ${s.t}`} tone={i % 2 === 1 ? "dark" : "light"} /></div>
       </div>
     </section>
   ))}

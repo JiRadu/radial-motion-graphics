@@ -42,6 +42,12 @@ npm run check    # verificare de tipuri
 - Cine are activată opțiunea `prefers-reduced-motion` vede totul static. Fără JavaScript, conținutul e complet vizibil.
 - Pagina principală are ~240 KB în total. Fonturile sunt găzduite local, deci nu se fac cereri către Google Fonts.
 
+## Mobil și teme
+
+- CSS-ul este scris **mobile-first**: regulile de bază sunt pentru telefon, iar ecranele mai mari primesc ajustări (`min-width` 560 / 760 / 1080 px).
+- Pe telefon: meniul ocupă tot ecranul, listele de carduri de pe prima pagină se derulează orizontal, butoanele sunt pe toată lățimea, iar jos e o bară fixă cu telefonul și „Cere o ofertă”. Toate zonele de atins au cel puțin 44 px.
+- Tema deschisă sau întunecată urmează automat setarea browserului. Butonul de lângă limbă o schimbă manual, iar alegerea se păstrează în `localStorage`.
+
 ## SEO / GEO / LLM
 
 - Fiecare pagină are titlu și descriere proprii, URL canonic, `hreflang` ro/en/x-default, Open Graph și imagine de distribuire.

@@ -38,7 +38,7 @@ const crumbs = [
   {SERVICES.map((s, i) => (
     <section class:list={["section", { "section--cream": i % 2 === 1 }]} id={s.id}>
       <div class="container split">
-        <div style={i % 2 === 1 ? "order:2" : undefined}>
+        <div class:list={[{ flip: i % 2 === 1 }]}>
           <p class="eyebrow">{s.secondary ? s.eyebrow[lang] : `${String(i + 1).padStart(2, "0")} · ${s.eyebrow[lang]}`}</p>
           <h2>{s.title[lang]}</h2>
           <span class="goldline" aria-hidden="true"></span>
@@ -48,7 +48,7 @@ const crumbs = [
           </ul>
           <div class="btn-row"><a class="btn btn--primary" href={child("services", lang, s.slug[lang])}>{ui.readMore}<span class="sr-only">: {s.short[lang]}</span></a></div>
         </div>
-        <div style="aspect-ratio:1/1"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} tone={i % 2 === 1 ? "dark" : "light"} /></div>
+        <div class="media media--square"><Drawing name={s.drawing} label={`${ui.illustration}: ${s.short[lang]}`} tone={i % 2 === 1 ? "dark" : "light"} /></div>
       </div>
     </section>
   ))}

@@ -1,4 +1,5 @@
 ---
+import { SITE } from "../data/site";
 import { r, t, type Alternates, type Lang, type RouteKey, type NavKey } from "../i18n/ui";
 
 interface Props { lang: Lang; alternates: Alternates; section?: RouteKey }
@@ -11,7 +12,7 @@ const items: NavKey[] = ["services", "projects", "process", "about", "journal", 
 <header class="site-header">
   <div class="container">
     <a class="brand" href={r("home", lang)} aria-label={`Radial Cons — ${ui.home}`}>
-      <img src="/brand/radialcons-logo-orizontal-color.svg" alt="Radial Cons" width="168" height="65" />
+      <img src="/brand/radialcons-logo-orizontal-color.svg" alt="Radial Cons" width="168" height="65" fetchpriority="high" />
     </a>
     <nav class="nav" aria-label={ui.menu}>
       <ul>
@@ -21,21 +22,33 @@ const items: NavKey[] = ["services", "projects", "process", "about", "journal", 
       </ul>
     </nav>
     <div class="header-actions">
-      <a class="lang" href={alternates[other]} hreflang={other} lang={other} title={ui.otherLang}>{ui.otherLangShort}</a>
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-label={ui.themeToggle} title={ui.themeToggle}
+        data-label-dark={ui.themeToDark} data-label-light={ui.themeToLight}>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+      </button>
+      <a class="icon-btn lang" href={alternates[other]} hreflang={other} lang={other} aria-label={ui.otherLang} title={ui.otherLang}>{ui.otherLangShort}</a>
       <a class="btn btn--primary header-cta on-dark" href={r("contact", lang)}>{ui.cta}</a>
+      <details class="menu">
+        <summary aria-label={ui.menu}><span class="bars" aria-hidden="true"></span></summary>
+        <div class="menu-panel on-dark">
+          <nav aria-label={ui.menu}>
+            <ul>
+              <li><a href={r("home", lang)} aria-current={section === "home" ? "page" : undefined}>{ui.home}</a></li>
+              {items.map((k) => (
+                <li><a href={r(k, lang)} aria-current={section === k ? "page" : undefined}>{ui.nav[k]}</a></li>
+              ))}
+              <li><a href={r("testimonials", lang)} aria-current={section === "testimonials" ? "page" : undefined}>{ui.nav.testimonials}</a></li>
+              <li><a href={r("faq", lang)} aria-current={section === "faq" ? "page" : undefined}>{ui.nav.faq}</a></li>
+            </ul>
+          </nav>
+          <div class="menu-contact">
+            <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
+            <a class="btn btn--ghost" href={SITE.phoneMobile.href}>{ui.call} {SITE.phoneMobile.display}</a>
+            <p>{SITE.email}</p>
+          </div>
+        </div>
+      </details>
     </div>
-    <details class="menu">
-      <summary><span class="bars" aria-hidden="true"></span>{ui.menu}</summary>
-      <div class="menu-panel on-dark">
-        <ul>
-          {items.map((k) => (
-            <li><a href={r(k, lang)} aria-current={section === k ? "page" : undefined}>{ui.nav[k]}</a></li>
-          ))}
-          <li><a href={r("testimonials", lang)}>{ui.nav.testimonials}</a></li>
-          <li><a href={r("faq", lang)}>{ui.nav.faq}</a></li>
-        </ul>
-        <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
-      </div>
-    </details>
   </div>
 </header>

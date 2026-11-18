@@ -17,14 +17,14 @@ const defaultText = lang === "ro"
     <div>
       <p class="eyebrow">{ui.cta}</p>
       <h2>{title ?? ui.closing}</h2>
-      <p class="lead" style="margin-top:16px">{text ?? defaultText}</p>
+      <p class="lead">{text ?? defaultText}</p>
       <div class="contact-inline">
         <a href={SITE.phoneMobile.href}>{SITE.phoneMobile.display}</a>
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
         <span>{SITE.address.city}, {SITE.address.county}</span>
       </div>
     </div>
-    <div class="btn-row" style="margin-top:0">
+    <div class="btn-row btn-row--flush">
       <a class="btn btn--primary" href={r("contact", lang)}>{ui.cta}</a>
       <a class="btn btn--ghost" href={SITE.phoneMobile.href}>{ui.call}</a>
     </div>

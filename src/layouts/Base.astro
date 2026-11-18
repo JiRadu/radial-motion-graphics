@@ -3,7 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE } from "../data/site";
-import { LOCALE, OG_LOCALE, t, type Alternates, type Lang, type RouteKey } from "../i18n/ui";
+import { LOCALE, OG_LOCALE, r, t, type Alternates, type Lang, type RouteKey } from "../i18n/ui";
 import { organization, website } from "../lib/schema";
 
 interface Props {
@@ -31,7 +31,7 @@ const schemas = [organization(lang), website(lang), ...jsonLd];
 <html lang={LOCALE[lang]}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -59,7 +59,13 @@ const schemas = [organization(lang), website(lang), ...jsonLd];
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
 
-    <script is:inline>document.documentElement.classList.add("js");</script>
+    <script is:inline>
+      // Runs before first paint: marks JS as available and applies a theme the visitor picked earlier (no flash).
+      (function (d) {
+        d.classList.add("js");
+        try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") d.setAttribute("data-theme", t); } catch (e) {}
+      })(document.documentElement);
+    </script>
     {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body>
@@ -70,10 +76,36 @@ const schemas = [organization(lang), website(lang), ...jsonLd];
     </main>
     <Footer lang={lang} />
     <nav class="callbar" aria-label={ui.reach}>
-      <a href={SITE.phoneMobile.href}>{ui.call} {SITE.phoneMobile.display}</a>
-      <a href={`mailto:${SITE.email}`}>{ui.cta}</a>
+      <a href={SITE.phoneMobile.href} aria-label={`${ui.call} ${SITE.phoneMobile.display}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z" /></svg>
+        {SITE.phoneMobile.display}
+      </a>
+      <a href={r("contact", lang)}>{ui.cta}</a>
     </nav>
 
+    <script is:inline>
+      // Theme button: switches between light and dark and remembers the choice. Default = browser setting.
+      (function () {
+        var d = document.documentElement, mq = window.matchMedia("(prefers-color-scheme: dark)");
+        var current = function () { return d.getAttribute("data-theme") || (mq.matches ? "dark" : "light"); };
+        document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
+          var sync = function () {
+            var dark = current() === "dark";
+            btn.setAttribute("aria-pressed", String(dark));
+            btn.setAttribute("aria-label", dark ? btn.dataset.labelLight : btn.dataset.labelDark);
+            btn.title = btn.getAttribute("aria-label");
+          };
+          sync();
+          btn.addEventListener("click", function () {
+            var next = current() === "dark" ? "light" : "dark";
+            d.setAttribute("data-theme", next);
+            try { localStorage.setItem("theme", next); } catch (e) {}
+            sync();
+          });
+          mq.addEventListener && mq.addEventListener("change", sync);
+        });
+      })();
+    </script>
     <script is:inline>
       // One-time reveal: adds .is-visible when an element enters the viewport. No loops, no libraries.
       (function () {
