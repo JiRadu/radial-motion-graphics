@@ -16,8 +16,10 @@ const Word: React.FC<{
         display: "inline-block",
         overflow: "hidden",
         verticalAlign: "bottom",
-        paddingBottom: fontSize * 0.06,
-        marginRight: fontSize * 0.26,
+        // Room for descenders and the comma under ș/ț inside the mask.
+        paddingBottom: fontSize * 0.16,
+        marginBottom: -fontSize * 0.16,
+        marginRight: fontSize * 0.24,
       }}
     >
       <span
@@ -38,7 +40,8 @@ const Word: React.FC<{
 
 /**
  * Headline that reveals word by word from behind a mask.
- * Words listed in `highlight` are tinted with the accent colour.
+ * Words listed in `highlight` are tinted with the accent colour (Auriu Radial).
+ * Set in Playfair Display Bold, sentence case (brandbook §7).
  */
 export const AnimatedTitle: React.FC<{
   text: string;
@@ -64,9 +67,9 @@ export const AnimatedTitle: React.FC<{
       fontFamily: FONTS.display,
       fontWeight: 700,
       fontSize,
-      lineHeight: 1.04,
-      textTransform: "uppercase",
-      letterSpacing: 1,
+      lineHeight: 1.12,
+      // Brandbook §7: titles in sentence case, never uppercase.
+      letterSpacing: -0.005 * fontSize,
       ...style,
     }}
   >

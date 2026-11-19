@@ -1,10 +1,10 @@
 import React from "react";
 import { interpolate } from "remotion";
-import { COLORS, FONTS } from "../theme";
+import { COLORS, FONTS, LABEL_TRACKING } from "../theme";
 import { SPRINGS, useSpringIn } from "../utils/animation";
 import { FadeUp } from "./FadeUp";
 
-/** Small uppercase label with a growing accent bar, used above headlines. */
+/** Small uppercase label with the brand's gold line (64 × 3 px) growing in. */
 export const Eyebrow: React.FC<{ text: string; delay?: number }> = ({
   text,
   delay = 0,
@@ -15,7 +15,7 @@ export const Eyebrow: React.FC<{ text: string; delay?: number }> = ({
       <div
         style={{
           width: interpolate(bar, [0, 1], [0, 64]),
-          height: 4,
+          height: 3,
           background: COLORS.accent,
         }}
       />
@@ -24,8 +24,8 @@ export const Eyebrow: React.FC<{ text: string; delay?: number }> = ({
           style={{
             fontFamily: FONTS.body,
             fontWeight: 600,
-            fontSize: 26,
-            letterSpacing: 6,
+            fontSize: 24,
+            letterSpacing: LABEL_TRACKING,
             textTransform: "uppercase",
             color: COLORS.steel,
           }}
@@ -37,14 +37,14 @@ export const Eyebrow: React.FC<{ text: string; delay?: number }> = ({
   );
 };
 
-/** Numbered feature row with an accent edge. */
+/** Numbered feature row: "01" in gold Montserrat, title, one line of detail. */
 export const FeatureRow: React.FC<{
   index: number;
   title: string;
   detail: string;
   delay?: number;
   width?: number;
-}> = ({ index, title, detail, delay = 0, width = 780 }) => {
+}> = ({ index, title, detail, delay = 0, width = 880 }) => {
   const p = useSpringIn(delay, SPRINGS.smooth);
   return (
     <div
@@ -55,18 +55,19 @@ export const FeatureRow: React.FC<{
         padding: "20px 30px",
         width,
         background: COLORS.panel,
-        borderLeft: `6px solid ${COLORS.accent}`,
+        borderLeft: `3px solid ${COLORS.accent}`,
         opacity: p,
         transform: `translateX(${interpolate(p, [0, 1], [-60, 0])}px)`,
       }}
     >
       <span
         style={{
-          fontFamily: FONTS.display,
-          fontWeight: 500,
-          fontSize: 54,
+          fontFamily: FONTS.body,
+          fontWeight: 600,
+          fontSize: 40,
+          letterSpacing: "0.04em",
           color: COLORS.accent,
-          minWidth: 70,
+          minWidth: 64,
         }}
       >
         {String(index).padStart(2, "0")}
@@ -74,17 +75,17 @@ export const FeatureRow: React.FC<{
       <div>
         <div
           style={{
-            fontFamily: FONTS.display,
-            fontWeight: 500,
-            fontSize: 40,
-            textTransform: "uppercase",
+            fontFamily: FONTS.body,
+            fontWeight: 600,
+            fontSize: 32,
             color: COLORS.text,
+            marginBottom: 4,
           }}
         >
           {title}
         </div>
         <div
-          style={{ fontFamily: FONTS.body, fontSize: 24, color: COLORS.steel }}
+          style={{ fontFamily: FONTS.body, fontSize: 23, color: COLORS.steel }}
         >
           {detail}
         </div>
@@ -93,7 +94,7 @@ export const FeatureRow: React.FC<{
   );
 };
 
-/** Rounded pill label that pops in. */
+/** Square-cornered label (brandbook §9: corners 0–4 px) that pops in. */
 export const Chip: React.FC<{
   text: string;
   delay?: number;
@@ -103,14 +104,14 @@ export const Chip: React.FC<{
   return (
     <div
       style={{
-        padding: "12px 28px",
-        borderRadius: 999,
-        border: `2px solid ${color}`,
-        color: COLORS.text,
+        padding: "14px 26px",
+        borderRadius: 2,
+        border: `1.5px solid ${color}`,
+        color: COLORS.ink,
         fontFamily: FONTS.body,
         fontWeight: 600,
-        fontSize: 24,
-        letterSpacing: 3,
+        fontSize: 22,
+        letterSpacing: LABEL_TRACKING,
         textTransform: "uppercase",
         opacity: p,
         transform: `scale(${interpolate(p, [0, 1], [0.6, 1])})`,

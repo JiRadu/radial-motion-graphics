@@ -9,8 +9,9 @@ import { COLORS } from "../theme";
 import { useTimelineFps } from "../utils/speed";
 
 /**
- * Full-frame industrial backdrop: drifting blueprint grid, a moving glow and
- * optional rising sparks. Sparks use `random(seed)` so every render is identical.
+ * Full-frame backdrop on Negru Atelier: faint drifting drawing grid, a warm
+ * moving glow and optional rising sparks. Sparks use `random(seed)` so every
+ * render is identical.
  */
 export const Background: React.FC<{
   glowColor?: string;
@@ -21,7 +22,7 @@ export const Background: React.FC<{
   glowColor = COLORS.accent,
   sparks = 0,
   seed = "bg",
-  gridOpacity = 0.35,
+  gridOpacity = 0.22,
 }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
@@ -42,7 +43,7 @@ export const Background: React.FC<{
       />
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse at ${50 + Math.sin(t * 0.6) * 12}% 105%, ${glowColor}38 0%, transparent 62%)`,
+          background: `radial-gradient(ellipse at ${50 + Math.sin(t * 0.6) * 12}% 105%, ${glowColor}2E 0%, transparent 62%)`,
         }}
       />
       {Array.from({ length: sparks }).map((_, i) => {

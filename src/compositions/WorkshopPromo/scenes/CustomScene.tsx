@@ -55,9 +55,9 @@ const Blueprint: React.FC<{ stamp: string }> = ({ stamp: stampText }) => {
       style={{
         width: 760,
         height: 640,
-        background: "#0D1F2E",
+        background: "#1A1816",
         border: `2px solid ${COLORS.laser}55`,
-        backgroundImage: `linear-gradient(${COLORS.laser}18 1px, transparent 1px), linear-gradient(90deg, ${COLORS.laser}18 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(${COLORS.laser}12 1px, transparent 1px), linear-gradient(90deg, ${COLORS.laser}12 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
         position: "relative",
       }}
@@ -166,12 +166,12 @@ const Blueprint: React.FC<{ stamp: string }> = ({ stamp: stampText }) => {
           right: 40,
           bottom: 40,
           padding: "14px 26px",
-          border: `4px solid ${COLORS.accent}`,
+          border: `3px solid ${COLORS.accent}`,
           color: COLORS.accent,
-          fontFamily: FONTS.display,
-          fontWeight: 700,
-          fontSize: 34,
-          letterSpacing: 3,
+          fontFamily: FONTS.body,
+          fontWeight: 600,
+          fontSize: 28,
+          letterSpacing: "0.18em",
           textTransform: "uppercase",
           opacity: stamp,
           transform: `rotate(-8deg) scale(${interpolate(stamp, [0, 1], [1.8, 1])})`,
@@ -187,7 +187,7 @@ export const CustomScene: React.FC<{ copy: Copy["custom"] }> = ({ copy }) => {
   const s = useSeconds();
   return (
     <AbsoluteFill>
-      <Background glowColor={COLORS.laser} seed="custom" />
+      <Background glowColor={COLORS.bronze} seed="custom" />
       {/* Sound: laser traces the outline, blips for list items, stamp impact */}
       <Sfx name="laser" atSeconds={0.4} volume={0.45} />
       {copy.points.map((p, i) => (
@@ -229,8 +229,8 @@ export const CustomScene: React.FC<{ copy: Copy["custom"] }> = ({ copy }) => {
                     alignItems: "center",
                     gap: 22,
                     fontFamily: FONTS.body,
-                    fontSize: 34,
-                    color: COLORS.text,
+                    fontSize: 32,
+                    color: COLORS.ink,
                   }}
                 >
                   <div

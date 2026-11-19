@@ -18,7 +18,8 @@ import { StructuresScene } from "./scenes/StructuresScene";
 import { TechnologyScene } from "./scenes/TechnologyScene";
 
 /**
- * Promo for a small metal-fabrication workshop.
+ * Promo for Radial Cons, metal-fabrication workshop (Târgoviște, since 1999).
+ * Visual identity follows the Radial Cons brandbook (see src/theme.ts).
  * Scene order:   intro -> furniture -> structures -> custom -> technology -> outro
  * Transitions:   slide,   wipe,         fade,       slide,    fade
  */
@@ -27,6 +28,7 @@ export const WorkshopPromo: React.FC<WorkshopPromoProps> = ({
   brandName,
   website,
   email,
+  phone,
   sceneSeconds,
   transitionSeconds,
   musicFile,
@@ -110,6 +112,7 @@ export const WorkshopPromo: React.FC<WorkshopPromoProps> = ({
                 cta={copy.outro.cta}
                 website={website}
                 email={email}
+                phone={phone}
                 durationInFrames={f(sceneSeconds.outro)}
               />
             </TransitionSeries.Sequence>

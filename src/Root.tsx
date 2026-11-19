@@ -21,9 +21,10 @@ export const RemotionRoot: React.FC = () => {
           // Keep this object inline so Studio can save edits back to this file.
           defaultProps={{
             language: "ro",
-            brandName: "IRONWORKS",
-            website: "www.atelierul-tau.ro",
-            email: "contact@atelierul-tau.ro",
+            brandName: "Radial Cons",
+            website: "radialcons.ro",
+            email: "radialcons@gmail.com",
+            phone: "0744 704 446",
             width: 1920,
             height: 1080,
             fps: 30,

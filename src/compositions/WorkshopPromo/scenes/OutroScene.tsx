@@ -1,82 +1,53 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Circle, Polygon } from "@remotion/shapes";
 import {
   AnimatedTitle,
   Background,
   FadeUp,
+  RadialLogo,
   Sfx,
   Stage,
 } from "../../../components";
 import { COLORS, FONTS } from "../../../theme";
-import { SPRINGS, useProgress, useSpringIn } from "../../../utils/animation";
-import { useSpeed } from "../../../utils/speed";
+import { useProgress } from "../../../utils/animation";
 import { useSeconds } from "../../../utils/timing";
 import { Copy } from "../copy";
 
+/**
+ * End card (brandbook §3, §7): logo, motto, the gold line, the closing line
+ * and the official contact details, centred.
+ */
 export const OutroScene: React.FC<{
   brandName: string;
   tagline: Copy["intro"]["tagline"];
   cta: string;
   website: string;
   email: string;
+  phone: string;
   durationInFrames: number;
-}> = ({ brandName, tagline, cta, website, email, durationInFrames }) => {
+}> = ({ brandName, tagline, cta, website, email, phone, durationInFrames }) => {
   const frame = useCurrentFrame();
-  const speed = useSpeed();
   const s = useSeconds();
 
-  const ring = useSpringIn(s(0.2), SPRINGS.heavy);
-  const brand = useSpringIn(s(0.4), SPRINGS.smooth);
-  const divider = useProgress(s(1.4), s(2.2));
+  const divider = useProgress(s(1.5), s(2.1));
   const fadeOut = interpolate(
     frame,
     [durationInFrames - s(0.6), durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
+  const contacts = [website, email, phone].filter(Boolean);
 
   return (
     <AbsoluteFill style={{ opacity: fadeOut, backgroundColor: "black" }}>
-      <Background sparks={55} seed="outro" />
-      {/* Sound: logo impact, blip on the call to action */}
-      <Sfx name="impact" atSeconds={0.4} />
-      <Sfx name="blip" atSeconds={1.8} volume={0.35} />
+      <Background sparks={45} seed="outro" />
+      {/* Sound: logo impact, blip on the closing line */}
+      <Sfx name="impact" atSeconds={0.45} />
+      <Sfx name="blip" atSeconds={1.9} volume={0.35} />
       <Stage>
         <AbsoluteFill
           style={{ justifyContent: "center", alignItems: "center" }}
         >
-          <div
-            style={{
-              position: "absolute",
-              opacity: 0.35 * ring,
-              transform: `scale(${interpolate(ring, [0, 1], [0.5, 1])}) rotate(${-frame * speed * 0.2}deg)`,
-            }}
-          >
-            <Circle
-              radius={440}
-              fill="none"
-              stroke={COLORS.line}
-              strokeWidth={2}
-              strokeDasharray="6 14"
-            />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              opacity: 0.25 * ring,
-              transform: `rotate(${frame * speed * 0.3}deg)`,
-            }}
-          >
-            <Polygon
-              points={6}
-              radius={360}
-              fill="none"
-              stroke={COLORS.accent}
-              strokeWidth={2}
-            />
-          </div>
-
           <div
             style={{
               display: "flex",
@@ -85,62 +56,66 @@ export const OutroScene: React.FC<{
               gap: 26,
             }}
           >
-            <div
-              style={{
-                fontFamily: FONTS.display,
-                fontWeight: 700,
-                fontSize: 200,
-                lineHeight: 1,
-                letterSpacing: interpolate(brand, [0, 1], [40, 14]),
-                color: COLORS.text,
-                opacity: brand,
-                transform: `scale(${interpolate(brand, [0, 1], [0.9, 1])})`,
-              }}
-            >
-              {brandName}
-            </div>
+            <RadialLogo
+              id="outro-logo"
+              width={820}
+              delay={s(0.15)}
+              label={brandName}
+            />
             <AnimatedTitle
               text={tagline.text}
-              fontSize={60}
-              delay={s(0.8)}
+              fontSize={64}
+              delay={s(0.9)}
               highlight={tagline.highlight}
-              style={{ fontWeight: 500, letterSpacing: 4 }}
             />
             <div
               style={{
-                width: 520 * divider,
+                width: 64 * divider,
                 height: 3,
                 background: COLORS.accent,
-                margin: "10px 0",
+                margin: "6px 0",
               }}
             />
-            <FadeUp delay={s(1.8)}>
+            <FadeUp delay={s(1.9)}>
               <div
                 style={{
                   fontFamily: FONTS.display,
-                  fontWeight: 500,
-                  fontSize: 56,
-                  textTransform: "uppercase",
-                  letterSpacing: 3,
+                  fontWeight: 700,
+                  fontStyle: "normal",
+                  fontSize: 54,
                   color: COLORS.accent,
                 }}
               >
                 {cta}
               </div>
             </FadeUp>
-            <FadeUp delay={s(2.2)}>
+            <FadeUp delay={s(2.3)}>
               <div
                 style={{
                   display: "flex",
-                  gap: 50,
+                  alignItems: "center",
+                  gap: 28,
+                  marginTop: 14,
                   fontFamily: FONTS.body,
-                  fontSize: 32,
+                  fontWeight: 500,
+                  fontSize: 30,
                   color: COLORS.steel,
                 }}
               >
-                <span>{website}</span>
-                <span style={{ color: COLORS.line }}>|</span>
-                <span>{email}</span>
+                {contacts.map((c, i) => (
+                  <React.Fragment key={c}>
+                    {i > 0 ? (
+                      <span
+                        style={{
+                          width: 6,
+                          height: 6,
+                          background: COLORS.bronze,
+                        }}
+                      />
+                    ) : null}
+                    <span>{c}</span>
+                  </React.Fragment>
+                ))}
               </div>
             </FadeUp>
           </div>

@@ -13,6 +13,8 @@ export const workshopPromoSchema = z.object({
   brandName: z.string(),
   website: z.string(),
   email: z.string(),
+  /** Shown on the end card; empty = hidden. */
+  phone: z.string(),
   width: z.number().int().min(16),
   height: z.number().int().min(16),
   fps: z.number().int().min(1).max(120),

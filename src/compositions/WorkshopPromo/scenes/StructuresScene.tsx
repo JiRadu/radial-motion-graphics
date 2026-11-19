@@ -6,6 +6,7 @@ import {
   DrawPath,
   Eyebrow,
   FadeUp,
+  RadialRays,
   Sfx,
   Stage,
 } from "../../../components";
@@ -83,7 +84,7 @@ const SolarArray: React.FC = () => {
           y2={120}
         >
           <stop offset="0%" stopColor={COLORS.solar} />
-          <stop offset="50%" stopColor="#4F8FCC" />
+          <stop offset="50%" stopColor={COLORS.bronze} />
           <stop offset="100%" stopColor={COLORS.solar} />
         </linearGradient>
       </defs>
@@ -166,7 +167,7 @@ const SolarArray: React.FC = () => {
             <polygon
               points={pts.map((pt) => pt.join(",")).join(" ")}
               fill="url(#pv)"
-              stroke={COLORS.laser}
+              stroke={COLORS.steel}
               strokeWidth={2}
             />
             {[1 / 3, 2 / 3].map((k) => {
@@ -179,8 +180,8 @@ const SolarArray: React.FC = () => {
                   y1={a[1]}
                   x2={b[0]}
                   y2={b[1]}
-                  stroke={COLORS.laser}
-                  strokeOpacity={0.5}
+                  stroke={COLORS.steel}
+                  strokeOpacity={0.45}
                   strokeWidth={1.5}
                 />
               );
@@ -194,8 +195,8 @@ const SolarArray: React.FC = () => {
                   y1={a[1]}
                   x2={b[0]}
                   y2={b[1]}
-                  stroke={COLORS.laser}
-                  strokeOpacity={0.5}
+                  stroke={COLORS.steel}
+                  strokeOpacity={0.45}
                   strokeWidth={1.5}
                 />
               );
@@ -227,11 +228,9 @@ const Panel: React.FC<{
         style={{
           padding: "18px 28px",
           borderTop: `1px solid ${COLORS.line}`,
-          fontFamily: FONTS.display,
-          fontWeight: 500,
-          fontSize: 34,
-          textTransform: "uppercase",
-          letterSpacing: 2,
+          fontFamily: FONTS.body,
+          fontWeight: 600,
+          fontSize: 30,
           color: COLORS.text,
           display: "flex",
           alignItems: "center",
@@ -251,11 +250,18 @@ export const StructuresScene: React.FC<{ copy: Copy["structures"] }> = ({
   const s = useSeconds();
   return (
     <AbsoluteFill>
-      <Background glowColor={COLORS.laser} seed="structures" />
+      <Background glowColor={COLORS.bronze} seed="structures" />
       {/* Sound: two muted knocks as the steel frames go up */}
       <Sfx name="clank" atSeconds={0.6} volume={0.7} />
       <Sfx name="clank" atSeconds={1.15} volume={0.45} />
       <Stage>
+        <RadialRays
+          id="structures-rays"
+          x={1880}
+          y={60}
+          size={1100}
+          delay={s(0.2)}
+        />
         <div
           style={{
             position: "absolute",

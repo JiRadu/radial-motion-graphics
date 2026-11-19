@@ -171,11 +171,10 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
                   <Icon progress={draw} active={active > 0.5} size={210} />
                   <div
                     style={{
-                      fontFamily: FONTS.display,
-                      fontWeight: 500,
-                      fontSize: 36,
+                      fontFamily: FONTS.body,
+                      fontWeight: 600,
+                      fontSize: 30,
                       whiteSpace: "nowrap",
-                      textTransform: "uppercase",
                       color: COLORS.text,
                     }}
                   >
@@ -196,8 +195,8 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
                       marginTop: "auto",
                       fontFamily: FONTS.body,
                       fontWeight: 600,
-                      fontSize: 18,
-                      letterSpacing: 3,
+                      fontSize: 17,
+                      letterSpacing: "0.18em",
                       textTransform: "uppercase",
                       color: active > 0.5 ? COLORS.accent : COLORS.steel,
                     }}

@@ -3,6 +3,8 @@
  *
  * - Pick the language with the `language` prop (Studio props panel or
  *   `--props='{"language":"en"}'`). Romanian is the default.
+ * - Tone follows the Radial Cons brandbook: short titles ending in a full
+ *   stop, sentence case, no exclamation marks.
  * - `highlight` lists words (exactly as written in the title, including
  *   punctuation) that are tinted with the accent colour.
  * - Join words with a non-breaking space (\u00A0) to keep a phrase on one
@@ -58,8 +60,8 @@ export const COPY: Record<Language, Copy> = {
     intro: {
       eyebrow: "Atelier de confecții metalice",
       tagline: {
-        text: "Atelier mic. Precizie de oțel.",
-        highlight: ["Precizie", "de", "oțel."],
+        text: "Construit în jurul ideii\u00A0tale.",
+        highlight: ["ideii\u00A0tale."],
       },
       services: [
         "Mobilier",
@@ -72,7 +74,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: "Pentru casă și grădină",
       title: {
         // Non-breaking spaces keep "vetre de foc" on one line (and one highlight).
-        text: "Mobilier și vetre\u00A0de\u00A0foc făcute să dureze",
+        text: "Mobilier și vetre\u00A0de\u00A0foc făcute să dureze.",
         highlight: ["vetre\u00A0de\u00A0foc"],
       },
       features: [
@@ -93,7 +95,7 @@ export const COPY: Record<Language, Copy> = {
     structures: {
       eyebrow: "Proiecte industriale",
       title: {
-        text: "Structuri metalice de mari dimensiuni",
+        text: "Structuri metalice de mari dimensiuni.",
         highlight: ["metalice"],
       },
       warehouses: "Hale și depozite industriale",
@@ -115,8 +117,8 @@ export const COPY: Record<Language, Copy> = {
     technology: {
       eyebrow: "Tehnologie de ultimă generație",
       title: {
-        text: "Precizie la fiecare tăiere, sudură și îndoire",
-        highlight: ["tăiere,", "sudură", "îndoire"],
+        text: "Precizie la fiecare tăiere, sudură și îndoire.",
+        highlight: ["tăiere,", "sudură", "îndoire."],
       },
       processes: [
         {
@@ -151,15 +153,15 @@ export const COPY: Record<Language, Copy> = {
     intro: {
       eyebrow: "Metal fabrication workshop",
       tagline: {
-        text: "Small workshop. Serious steel.",
-        highlight: ["Serious", "steel."],
+        text: "Built around your\u00A0idea.",
+        highlight: ["your\u00A0idea."],
       },
       services: ["Furniture", "Firepits", "Steel structures", "Custom parts"],
     },
     furniture: {
       eyebrow: "Indoor & outdoor living",
       title: {
-        text: "Furniture & firepits built to last",
+        text: "Furniture & firepits built to last.",
         highlight: ["firepits"],
       },
       features: [
@@ -179,7 +181,7 @@ export const COPY: Record<Language, Copy> = {
     },
     structures: {
       eyebrow: "Industrial projects",
-      title: { text: "Large-scale steel structures", highlight: ["steel"] },
+      title: { text: "Large-scale steel structures.", highlight: ["steel"] },
       warehouses: "Warehouses & industrial halls",
       solar: "Photovoltaic mounting structures",
     },
@@ -199,8 +201,8 @@ export const COPY: Record<Language, Copy> = {
     technology: {
       eyebrow: "Latest technology",
       title: {
-        text: "Precision in every cut, weld & bend",
-        highlight: ["cut,", "weld", "bend"],
+        text: "Precision in every cut, weld & bend.",
+        highlight: ["cut,", "weld", "bend."],
       },
       processes: [
         {
