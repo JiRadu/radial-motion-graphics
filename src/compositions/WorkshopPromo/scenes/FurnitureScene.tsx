@@ -20,118 +20,141 @@ import { useTimelineFps } from "../../../utils/speed";
 import { useSeconds } from "../../../utils/timing";
 import { Copy } from "../copy";
 
-const flamePath = (
-  cx: number,
-  base: number,
-  h: number,
-  w: number,
-  sway: number,
-) =>
-  `M${cx - w} ${base} C${cx - w} ${base - h * 0.45} ${cx + sway - w * 0.3} ${base - h * 0.6} ${cx + sway} ${base - h} ` +
-  `C${cx + sway + w * 0.4} ${base - h * 0.55} ${cx + w} ${base - h * 0.4} ${cx + w} ${base} Z`;
-
-const FLAMES = [
-  { cx: 300, h: 200, w: 62 },
-  { cx: 238, h: 125, w: 44 },
-  { cx: 362, h: 140, w: 44 },
+/** Backrest channels: from the top of the inner backrest down to the seat. */
+const TUFTS = [
+  "M96 206 L103 251",
+  "M140 177 L144 228",
+  "M200 166 V220",
+  "M260 177 L256 228",
+  "M304 206 L297 251",
 ];
 
-/** Stylised laser-cut firepit that draws itself, then ignites. */
-const Firepit: React.FC = () => {
+/**
+ * Semicircular restaurant banquette with a pedestal table that draws itself,
+ * then a pendant lamp above the table switches on.
+ */
+const Banquette: React.FC = () => {
   const frame = useCurrentFrame();
   const fps = useTimelineFps();
   const s = useSeconds();
 
-  const bowl = useProgress(s(0.3), s(1.5));
-  const legs = useProgress(s(1.0), s(1.8));
-  const fill = useProgress(s(1.2), s(2));
-  const ignite = useSpringIn(s(1.7), SPRINGS.bouncy);
+  const back = useProgress(s(0.3), s(1.4));
+  const seat = useProgress(s(0.6), s(1.6));
+  const fill = useProgress(s(1.1), s(1.9));
+  const table = useProgress(s(1.0), s(1.8));
+  const cord = useProgress(s(1.2), s(1.7));
+  const light = useSpringIn(s(1.8), SPRINGS.bouncy);
   const t = frame / fps;
+  const glow = light * (0.92 + 0.08 * Math.sin(t * 3));
 
   return (
-    <svg width={760} height={760} viewBox="0 0 600 600">
+    <svg width={760} height={760} viewBox="20 40 360 360">
       <defs>
-        <linearGradient id="flame" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stopColor={COLORS.accent} />
-          <stop offset="60%" stopColor={COLORS.accentSoft} />
-          <stop offset="100%" stopColor="#FFF3C4" />
+        <linearGradient id="upholstery" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3A3530" />
+          <stop offset="100%" stopColor="#1C1A18" />
         </linearGradient>
-        <radialGradient id="heat">
-          <stop offset="0%" stopColor={COLORS.accent} stopOpacity={0.55} />
+        <radialGradient id="lampGlow">
+          <stop offset="0%" stopColor={COLORS.accentSoft} stopOpacity={0.6} />
           <stop offset="100%" stopColor={COLORS.accent} stopOpacity={0} />
         </radialGradient>
-        <linearGradient id="bowlFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3A3F45" />
-          <stop offset="100%" stopColor="#1A1D21" />
+        <linearGradient id="lampCone" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={COLORS.accentSoft} stopOpacity={0.35} />
+          <stop offset="100%" stopColor={COLORS.accent} stopOpacity={0} />
         </linearGradient>
       </defs>
 
-      <circle
-        cx={300}
-        cy={240}
-        r={250}
-        fill="url(#heat)"
-        opacity={ignite * (0.8 + 0.2 * Math.sin(t * 9))}
-      />
+      {/* Warm pool of light behind everything once the lamp is on */}
+      <circle cx={200} cy={250} r={170} fill="url(#lampGlow)" opacity={glow} />
 
-      <g transform={`translate(300 300) scale(${ignite}) translate(-300 -300)`}>
-        {FLAMES.map((f, i) => {
-          const sway = Math.sin(t * 6 + i * 2) * 14;
-          const h = f.h * (1 + 0.1 * Math.sin(t * 11 + i));
-          return (
-            <g key={i}>
-              <path d={flamePath(f.cx, 305, h, f.w, sway)} fill="url(#flame)" />
-              <path
-                d={flamePath(f.cx, 305, h * 0.55, f.w * 0.45, sway * 0.6)}
-                fill="#FFF3C4"
-                opacity={0.85}
-              />
-            </g>
-          );
-        })}
-      </g>
-
+      {/* Backrest: top band and inner face */}
       <DrawPath
-        d="M90 300 Q300 480 510 300 Z"
-        progress={bowl}
-        color={COLORS.steel}
-        width={6}
-        fill="url(#bowlFill)"
+        d="M60 240 A140 100 0 0 1 340 240 L320 246 A120 80 0 0 0 80 246 Z"
+        progress={back}
+        width={2.6}
+        fill="url(#upholstery)"
         fillOpacity={fill}
       />
       <DrawPath
-        d="M90 300 A210 34 0 1 0 510 300 A210 34 0 1 0 90 300"
-        progress={bowl}
+        d="M80 246 A120 80 0 0 1 320 246 L312 282 A112 62 0 0 0 88 282 Z"
+        progress={back}
+        width={2.6}
+        fill="url(#upholstery)"
+        fillOpacity={fill * 0.8}
+      />
+      {TUFTS.map((d, i) => (
+        <DrawPath
+          key={d}
+          d={d}
+          progress={springAt(frame, fps, s(1.2) + i * 3, SPRINGS.bouncy)}
+          color={COLORS.accent}
+          width={2.4}
+        />
+      ))}
+
+      {/* Seat cushion and the two end panels */}
+      <DrawPath
+        d="M88 282 A112 62 0 0 1 312 282 L272 300 A72 36 0 0 0 128 300 Z"
+        progress={seat}
         color={COLORS.accent}
-        width={5}
-        glow
+        width={2.8}
+        fill={COLORS.bronzeDark}
+        fillOpacity={fill * 0.55}
+        glow={light > 0.5}
+      />
+      <DrawPath
+        d="M60 240 V318 L128 334 V300 L88 282 L80 246 Z"
+        progress={seat}
+        width={2.6}
+        fill="url(#upholstery)"
+        fillOpacity={fill}
+      />
+      <DrawPath
+        d="M340 240 V318 L272 334 V300 L312 282 L320 246 Z"
+        progress={seat}
+        width={2.6}
+        fill="url(#upholstery)"
+        fillOpacity={fill}
       />
 
-      {Array.from({ length: 7 }).map((_, i) => {
-        const tt = 0.2 + i * 0.1;
-        const x = 90 + 420 * tt;
-        const y = 300 + 360 * tt * (1 - tt) * 0.55 + 6;
-        const p = springAt(frame, fps, s(1.3) + i * 2, SPRINGS.bouncy);
-        return (
-          <circle
-            key={i}
-            cx={x}
-            cy={y}
-            r={9 * p}
-            fill={COLORS.accent}
-            opacity={0.4 + 0.6 * ignite}
-          />
-        );
-      })}
+      {/* Light cone onto the table */}
+      <path
+        d="M190 236 L210 236 L262 306 L138 306 Z"
+        fill="url(#lampCone)"
+        opacity={glow}
+      />
 
-      <DrawPath d="M190 400 L160 530" progress={legs} width={8} />
-      <DrawPath d="M410 400 L440 530" progress={legs} width={8} />
-      <DrawPath d="M300 438 L300 545" progress={legs} width={8} />
+      {/* Pedestal table */}
       <DrawPath
-        d="M70 548 H530"
-        progress={legs}
+        d="M146 306 A54 13 0 1 0 254 306 A54 13 0 1 0 146 306"
+        progress={table}
+        width={2.6}
+        fill={COLORS.panel}
+        fillOpacity={fill}
+      />
+      <DrawPath d="M200 319 V368 M172 368 H228" progress={table} width={2.6} />
+      <DrawPath
+        d="M60 378 H340"
+        progress={table}
         color={COLORS.line}
-        width={3}
+        width={1.4}
+      />
+
+      {/* Pendant lamp */}
+      <DrawPath
+        d="M200 46 V222"
+        progress={cord}
+        color={COLORS.line}
+        width={1.4}
+      />
+      <DrawPath
+        d="M188 222 H212 L222 238 H178 Z"
+        progress={cord}
+        color={COLORS.accent}
+        width={2.4}
+        fill={COLORS.accent}
+        fillOpacity={0.25 + 0.75 * light}
+        glow={light > 0.5}
       />
     </svg>
   );
@@ -144,7 +167,7 @@ export const FurnitureScene: React.FC<{ copy: Copy["furniture"] }> = ({
   return (
     <AbsoluteFill>
       <Background sparks={18} seed="furniture" />
-      {/* Sound: a blip per feature row, crackle when the firepit ignites */}
+      {/* Sound: a blip per feature row, a knock as the table lands, a click when the lamp turns on */}
       {copy.features.map((f, i) => (
         <Sfx
           key={f.title}
@@ -153,8 +176,9 @@ export const FurnitureScene: React.FC<{ copy: Copy["furniture"] }> = ({
           volume={0.3}
         />
       ))}
-      <Sfx name="sparks" atSeconds={1.7} volume={0.75} />
-      <Sfx name="sparks" atSeconds={2.9} volume={0.4} />
+      <Sfx name="clank" atSeconds={1.3} volume={0.45} />
+      <Sfx name="blip" atSeconds={1.8} volume={0.6} />
+      <Sfx name="laser" atSeconds={1.85} volume={0.35} />
       <Stage>
         <div
           style={{
@@ -194,7 +218,7 @@ export const FurnitureScene: React.FC<{ copy: Copy["furniture"] }> = ({
           </div>
         </div>
         <div style={{ position: "absolute", left: 1060, top: 170 }}>
-          <Firepit />
+          <Banquette />
         </div>
       </Stage>
     </AbsoluteFill>

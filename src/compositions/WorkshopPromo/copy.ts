@@ -66,28 +66,22 @@ export const COPY: Record<Language, Copy> = {
         text: "Construit în jurul ideii\u00A0tale.",
         highlight: ["ideii\u00A0tale."],
       },
-      services: [
-        "Mobilier",
-        "Vetre de foc",
-        "Structuri metalice",
-        "Piese la comandă",
-      ],
+      services: ["Mobilier", "Structuri metalice", "Piese la comandă"],
     },
     furniture: {
-      eyebrow: "Pentru casă și grădină",
+      eyebrow: "Pentru casă, grădină și HoReCa",
       title: {
-        // Non-breaking spaces keep "vetre de foc" on one line (and one highlight).
-        text: "Mobilier și vetre\u00A0de\u00A0foc făcute să dureze.",
-        highlight: ["vetre\u00A0de\u00A0foc"],
+        text: "Mobilier de interior și exterior făcut să dureze.",
+        highlight: ["interior", "exterior"],
       },
       features: [
         {
-          title: "Mobilier de interior și exterior",
-          detail: "Mese, bănci, scaune, rafturi și cadre",
+          title: "Mobilier pentru HoReCa",
+          detail: "Banchete, mese și scaune pentru restaurante și terase",
         },
         {
-          title: "Vetre și boluri de foc",
-          detail: "Modele decupate cu laser, din corten, oțel carbon sau inox",
+          title: "Mobilier pentru casă și grădină",
+          detail: "Mese, bănci, scaune, rafturi și cadre",
         },
         {
           title: "Accesorii pentru mobilier",
@@ -149,22 +143,22 @@ export const COPY: Record<Language, Copy> = {
         text: "Built around your\u00A0idea.",
         highlight: ["your\u00A0idea."],
       },
-      services: ["Furniture", "Firepits", "Steel structures", "Custom parts"],
+      services: ["Furniture", "Steel structures", "Custom parts"],
     },
     furniture: {
-      eyebrow: "Indoor & outdoor living",
+      eyebrow: "Home, garden & hospitality",
       title: {
-        text: "Furniture & firepits built to last.",
-        highlight: ["firepits"],
+        text: "Indoor and outdoor furniture built to last.",
+        highlight: ["Indoor", "outdoor"],
       },
       features: [
         {
-          title: "Indoor & outdoor furniture",
-          detail: "Tables, benches, chairs, shelving and frames",
+          title: "Hospitality furniture",
+          detail: "Banquettes, tables and chairs for restaurants and terraces",
         },
         {
-          title: "Firepits & fire bowls",
-          detail: "Laser-cut patterns in corten, carbon and stainless steel",
+          title: "Home & garden furniture",
+          detail: "Tables, benches, chairs, shelving and frames",
         },
         {
           title: "Furniture accessories",
