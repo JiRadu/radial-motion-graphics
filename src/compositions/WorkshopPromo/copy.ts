@@ -46,8 +46,11 @@ export type Copy = {
   technology: {
     eyebrow: string;
     title: Headline;
-    /** Order: laser cutting, laser welding, plasma cutting, bending. */
-    processes: (Item & { tag: string })[];
+    /**
+     * Order: laser cutting, laser welding, plasma & oxy-fuel, bending, milling,
+     * powder coating, liquid painting, conical rolling, turning, drilling & tapping.
+     */
+    processes: { title: string; tag: string }[];
   };
   outro: {
     cta: string;
@@ -121,26 +124,16 @@ export const COPY: Record<Language, Copy> = {
         highlight: ["tăiere,", "sudură", "îndoire."],
       },
       processes: [
-        {
-          title: "Debitare laser CNC",
-          detail: "Laser fiber de precizie pentru tablă și țeavă",
-          tag: "Tablă · Țeavă · Profile",
-        },
-        {
-          title: "Sudură laser",
-          detail: "Îmbinări curate și rezistente, cu deformări minime",
-          tag: "Oțel · Inox · Aluminiu",
-        },
-        {
-          title: "Debitare cu plasmă",
-          detail: "Tăiere rapidă și eficientă a tablei groase",
-          tag: "Tablă groasă",
-        },
-        {
-          title: "Îndoire CNC",
-          detail: "Îndoire pe abkant, la unghiuri exacte",
-          tag: "Unghiuri repetabile",
-        },
+        { title: "Debitare laser CNC", tag: "Tablă · Țeavă · Profile" },
+        { title: "Sudură laser", tag: "Oțel · Inox · Aluminiu" },
+        { title: "Plasmă și oxi-gaz", tag: "Tablă groasă" },
+        { title: "Îndoire CNC pe abkant", tag: "Unghiuri repetabile" },
+        { title: "Frezare și găurire", tag: "Găurire conică" },
+        { title: "Vopsire cu pulbere", tag: "Câmp electrostatic" },
+        { title: "Vopsire lichidă", tag: "Câmp electrostatic" },
+        { title: "Roluire conică", tag: "Cilindri · Conuri" },
+        { title: "Strunjire", tag: "Diferite materiale" },
+        { title: "Găurire și filetare", tag: "Mașini în coordonate" },
       ],
     },
     outro: {
@@ -205,26 +198,16 @@ export const COPY: Record<Language, Copy> = {
         highlight: ["cut,", "weld", "bend."],
       },
       processes: [
-        {
-          title: "CNC laser cutting",
-          detail: "Fiber-laser precision on sheet and tube",
-          tag: "Sheet · Tube · Profiles",
-        },
-        {
-          title: "Laser welding",
-          detail: "Clean, strong seams with minimal distortion",
-          tag: "Steel · Stainless · Alu",
-        },
-        {
-          title: "Plasma cutting",
-          detail: "Fast, efficient cutting of thick plate",
-          tag: "Heavy plate",
-        },
-        {
-          title: "CNC bending",
-          detail: "Press-brake forming to exact angles",
-          tag: "Repeatable angles",
-        },
+        { title: "CNC laser cutting", tag: "Sheet · Tube · Profiles" },
+        { title: "Laser welding", tag: "Steel · Stainless · Alu" },
+        { title: "Plasma & oxy-fuel", tag: "Heavy plate" },
+        { title: "CNC press-brake bending", tag: "Repeatable angles" },
+        { title: "Milling & drilling", tag: "Taper drilling" },
+        { title: "Powder coating", tag: "Electrostatic" },
+        { title: "Liquid painting", tag: "Electrostatic" },
+        { title: "Conical rolling", tag: "Cylinders · Cones" },
+        { title: "Turning", tag: "Various materials" },
+        { title: "Drilling & tapping", tag: "Coordinate machines" },
       ],
     },
     outro: {

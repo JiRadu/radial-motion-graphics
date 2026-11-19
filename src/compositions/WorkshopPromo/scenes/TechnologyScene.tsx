@@ -8,10 +8,16 @@ import {
   Eyebrow,
   FadeUp,
   LaserCutIcon,
+  LatheIcon,
+  LiquidIcon,
+  MillIcon,
   PlasmaIcon,
+  PowderIcon,
+  RollIcon,
   Sfx,
   SfxName,
   Stage,
+  TapIcon,
   WeldIcon,
 } from "../../../components";
 import { COLORS, FONTS } from "../../../theme";
@@ -25,14 +31,25 @@ const PROCESS_VISUALS: { Icon: typeof LaserCutIcon; sound: SfxName }[] = [
   { Icon: WeldIcon, sound: "sparks" },
   { Icon: PlasmaIcon, sound: "laser" },
   { Icon: BendIcon, sound: "clank" },
+  { Icon: MillIcon, sound: "clank" },
+  { Icon: PowderIcon, sound: "whoosh" },
+  { Icon: LiquidIcon, sound: "whoosh" },
+  { Icon: RollIcon, sound: "clank" },
+  { Icon: LatheIcon, sound: "sparks" },
+  { Icon: TapIcon, sound: "blip" },
 ];
 
-const CARD_W = 380;
-const GAP = 40;
-const LEFT = 140;
+/** Two rows of five cards. */
+const PER_ROW = 5;
+const CARD_W = 304;
+const CARD_H = 318;
+const GAP = 28;
+const ROW_GAP = 28;
+const LEFT = (1920 - (PER_ROW * CARD_W + (PER_ROW - 1) * GAP)) / 2;
+const TOP = 372;
 /** When the card highlight sequence starts, and how long each card stays lit (seconds). */
-const HIGHLIGHT_START = 2;
-const HIGHLIGHT_LEN = 1.05;
+const HIGHLIGHT_START = 1.8;
+const HIGHLIGHT_LEN = 0.64;
 
 export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
   copy,
@@ -44,21 +61,9 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
     ...copy.processes[i],
   }));
 
-  const rail = useProgress(s(0.4), s(1.6));
+  const rail = useProgress(s(0.3), s(1.3));
   const highlightStart = s(HIGHLIGHT_START);
   const highlightLen = s(HIGHLIGHT_LEN);
-  const centers = PROCESSES.map(
-    (_, i) => LEFT + i * (CARD_W + GAP) + CARD_W / 2,
-  );
-  const dotX = interpolate(
-    frame,
-    centers.flatMap((_, i) => [
-      highlightStart + i * highlightLen,
-      highlightStart + i * highlightLen + 8,
-    ]),
-    centers.flatMap((c) => [c, c]),
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-  );
 
   return (
     <AbsoluteFill>
@@ -69,7 +74,7 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
           key={title}
           name={sound}
           atSeconds={HIGHLIGHT_START + i * HIGHLIGHT_LEN}
-          volume={0.55}
+          volume={0.4}
         />
       ))}
       <Stage>
@@ -77,7 +82,7 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
           style={{
             position: "absolute",
             left: LEFT,
-            top: 90,
+            top: 80,
             display: "flex",
             flexDirection: "column",
             gap: 24,
@@ -86,95 +91,101 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
           <Eyebrow text={copy.eyebrow} />
           <AnimatedTitle
             text={copy.title.text}
-            fontSize={74}
+            fontSize={70}
             delay={s(0.15)}
             highlight={copy.title.highlight}
             style={{ maxWidth: 1640 }}
           />
         </div>
 
+        {/* Thin rule between the title and the cards */}
         <svg
           width={1920}
-          height={40}
-          style={{ position: "absolute", left: 0, top: 380 }}
+          height={20}
+          style={{ position: "absolute", left: 0, top: TOP - 40 }}
         >
           <DrawPath
-            d={`M${centers[0]} 20 H${centers[centers.length - 1]}`}
+            d={`M${LEFT} 10 H${1920 - LEFT}`}
             progress={rail}
             color={COLORS.line}
-            width={3}
-          />
-          {centers.map((c, i) => (
-            <circle
-              key={c}
-              cx={c}
-              cy={20}
-              r={8}
-              fill={COLORS.panelLight}
-              stroke={COLORS.steel}
-              strokeWidth={2}
-              opacity={progressBetween(frame, s(0.5) + i * 4, s(0.8) + i * 4)}
-            />
-          ))}
-          <circle
-            cx={dotX}
-            cy={20}
-            r={11}
-            fill={COLORS.accent}
-            opacity={progressBetween(frame, highlightStart - 6, highlightStart)}
-            style={{ filter: `drop-shadow(0 0 10px ${COLORS.accent})` }}
+            width={2}
           />
         </svg>
 
-        <div
-          style={{
-            position: "absolute",
-            left: LEFT,
-            top: 440,
-            display: "flex",
-            gap: GAP,
-          }}
-        >
-          {PROCESSES.map(({ Icon, title, detail, tag }, i) => {
-            const delay = s(0.6) + i * s(0.15);
-            const draw = progressBetween(frame, delay + s(0.2), delay + s(1.2));
-            const ws = highlightStart + i * highlightLen;
-            const active = interpolate(
-              frame,
-              [ws, ws + 6, ws + highlightLen - 4, ws + highlightLen + 4],
-              [0, 1, 1, 0],
-              { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-            );
-            return (
-              <FadeUp key={title} delay={delay} distance={60}>
+        {PROCESSES.map(({ Icon, title, tag }, i) => {
+          const row = Math.floor(i / PER_ROW);
+          const col = i % PER_ROW;
+          const delay = s(0.45) + i * s(0.07);
+          const draw = progressBetween(frame, delay + s(0.15), delay + s(1));
+          const ws = highlightStart + i * highlightLen;
+          const active = interpolate(
+            frame,
+            [ws, ws + 5, ws + highlightLen - 3, ws + highlightLen + 4],
+            [0, 1, 1, 0],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+          );
+          // Once a card has had its turn it keeps a faint bronze edge.
+          const done = frame > ws + highlightLen;
+          return (
+            <div
+              key={title}
+              style={{
+                position: "absolute",
+                left: LEFT + col * (CARD_W + GAP),
+                top: TOP + row * (CARD_H + ROW_GAP),
+              }}
+            >
+              <FadeUp delay={delay} distance={50}>
                 <div
                   style={{
                     width: CARD_W,
-                    height: 500,
+                    height: CARD_H,
                     boxSizing: "border-box",
-                    padding: "36px 34px",
+                    padding: "18px 20px 22px",
                     background: COLORS.panel,
-                    border: `2px solid ${active > 0.5 ? COLORS.accent : COLORS.line}`,
-                    boxShadow: `0 20px 60px ${COLORS.accent}${Math.round(
+                    border: `2px solid ${
+                      active > 0.5
+                        ? COLORS.accent
+                        : done
+                          ? COLORS.bronzeDark
+                          : COLORS.line
+                    }`,
+                    boxShadow: `0 16px 50px ${COLORS.accent}${Math.round(
                       active * 70,
                     )
                       .toString(16)
                       .padStart(2, "0")}`,
-                    transform: `translateY(${-14 * active}px)`,
+                    transform: `translateY(${-10 * active}px)`,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     textAlign: "center",
-                    gap: 14,
+                    gap: 6,
+                    position: "relative",
                   }}
                 >
-                  <Icon progress={draw} active={active > 0.5} size={210} />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 14,
+                      left: 18,
+                      fontFamily: FONTS.body,
+                      fontWeight: 600,
+                      fontSize: 16,
+                      letterSpacing: "0.12em",
+                      color:
+                        active > 0.5 || done ? COLORS.accent : COLORS.steel,
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <Icon progress={draw} active={active > 0.5} size={150} />
                   <div
                     style={{
                       fontFamily: FONTS.body,
                       fontWeight: 600,
-                      fontSize: 30,
-                      whiteSpace: "nowrap",
+                      fontSize: 25,
+                      lineHeight: 1.2,
                       color: COLORS.text,
                     }}
                   >
@@ -182,21 +193,11 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
                   </div>
                   <div
                     style={{
-                      fontFamily: FONTS.body,
-                      fontSize: 23,
-                      lineHeight: 1.35,
-                      color: COLORS.steel,
-                    }}
-                  >
-                    {detail}
-                  </div>
-                  <div
-                    style={{
                       marginTop: "auto",
                       fontFamily: FONTS.body,
                       fontWeight: 600,
-                      fontSize: 17,
-                      letterSpacing: "0.18em",
+                      fontSize: 14,
+                      letterSpacing: "0.16em",
                       textTransform: "uppercase",
                       color: active > 0.5 ? COLORS.accent : COLORS.steel,
                     }}
@@ -205,9 +206,9 @@ export const TechnologyScene: React.FC<{ copy: Copy["technology"] }> = ({
                   </div>
                 </div>
               </FadeUp>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </Stage>
     </AbsoluteFill>
   );

@@ -28,11 +28,11 @@ const sfxDir = path.join(audioDir, "sfx");
 
 /**
  * Keep in sync with the WorkshopPromo `speed` prop (src/Root.tsx). The music
- * bed is laid out on the video's design timeline (29 s at speed 1) and is
+ * bed is laid out on the video's design timeline (31.5 s at speed 1) and is
  * stretched to match: tempo and section changes slow down with the video.
  */
 const VIDEO_SPEED = 0.8;
-const DESIGN_LENGTH = 29;
+const DESIGN_LENGTH = 31.5;
 
 // ---------------------------------------------------------------- helpers
 
@@ -119,7 +119,7 @@ const music = () => {
   const beat = 60 / bpm;
   const bar = beat * 4;
   const drumsStart = bar; // drums enter after the logo reveal
-  const drumsEnd = real(24.8); // drop out for the outro
+  const drumsEnd = real(27.3); // drop out for the outro
   const [L, R] = stereo(dur);
   const noise = rng(11);
 

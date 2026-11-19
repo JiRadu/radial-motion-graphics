@@ -34,7 +34,7 @@ export const RemotionRoot: React.FC = () => {
               furniture: 5.5,
               structures: 5.5,
               custom: 5.5,
-              technology: 6.5,
+              technology: 9,
               outro: 5,
             },
             musicFile: "audio/music-bed.wav",

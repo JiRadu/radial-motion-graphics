@@ -5,6 +5,17 @@ export { Background } from "./Background";
 export { DrawPath } from "./DrawPath";
 export { FadeUp } from "./FadeUp";
 export { Chip, Eyebrow, FeatureRow } from "./Labels";
-export { BendIcon, LaserCutIcon, PlasmaIcon, WeldIcon } from "./ProcessIcons";
+export {
+  BendIcon,
+  LaserCutIcon,
+  LatheIcon,
+  LiquidIcon,
+  MillIcon,
+  PlasmaIcon,
+  PowderIcon,
+  RollIcon,
+  TapIcon,
+  WeldIcon,
+} from "./ProcessIcons";
 export { RadialLogo, RadialRays } from "./RadialLogo";
 export { Stage } from "./Stage";
