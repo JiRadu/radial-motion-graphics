@@ -6,6 +6,10 @@ import {
   workshopPromoSchema,
 } from "./compositions/WorkshopPromo/schema";
 import { WorkshopPromo } from "./compositions/WorkshopPromo/WorkshopPromo";
+import {
+  RASUFLATORI,
+  Rasuflatori,
+} from "./compositions/Rasuflatori/Rasuflatori";
 // @new-composition-imports (scripts/new-composition.mjs inserts imports above this line)
 
 export const RemotionRoot: React.FC = () => {
@@ -49,6 +53,13 @@ export const RemotionRoot: React.FC = () => {
           height={VIDEO.height}
           fps={VIDEO.fps}
           durationInFrames={VIDEO.fps}
+        />
+      </Folder>
+      <Folder name="Projects">
+        <Composition
+          id="Rasuflatori"
+          component={Rasuflatori}
+          {...RASUFLATORI}
         />
       </Folder>
       {/* @new-composition-entries (scripts/new-composition.mjs inserts compositions above this line) */}
